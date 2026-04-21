@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/components/loading-spinner/loading-spinner.component.ts"],
-  "sourcesContent": ["import { Component, Input } from '@angular/core';\nimport { MatProgressSpinnerModule } from '@angular/material/progress-spinner';\n\n@Component({\n  selector: 'app-loading-spinner',\n  standalone: true,\n  imports: [MatProgressSpinnerModule],\n  template: `\n    <div class=\"spinner-wrap\" [style.min-height]=\"minHeight\">\n      <mat-spinner [diameter]=\"diameter\" />\n    </div>\n  `,\n  styles: [`.spinner-wrap { display:flex; align-items:center; justify-content:center; width:100%; }`],\n})\nexport class LoadingSpinnerComponent {\n  @Input() diameter = 48;\n  @Input() minHeight = '200px';\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;AAcM,IAAO,0BAAP,MAAO,yBAAuB;EAXpC,cAAA;AAYW,SAAA,WAAW;AACX,SAAA,YAAY;;;;uBAFV,0BAAuB;IAAA;EAAA;;yEAAvB,0BAAuB,WAAA,CAAA,CAAA,qBAAA,CAAA,GAAA,QAAA,EAAA,UAAA,YAAA,WAAA,YAAA,GAAA,YAAA,MAAA,UAAA,CAAA,6BAAA,GAAA,OAAA,GAAA,MAAA,GAAA,QAAA,CAAA,CAAA,GAAA,cAAA,GAAA,CAAA,GAAA,UAAA,CAAA,GAAA,UAAA,SAAA,iCAAA,IAAA,KAAA;AAAA,UAAA,KAAA,GAAA;AANhC,QAAA,yBAAA,GAAA,OAAA,CAAA;AACE,QAAA,oBAAA,GAAA,eAAA,CAAA;AACF,QAAA,uBAAA;;;AAF0B,QAAA,sBAAA,cAAA,IAAA,SAAA;AACX,QAAA,oBAAA;AAAA,QAAA,qBAAA,YAAA,IAAA,QAAA;;sBAHP,0BAAwB,kBAAA,GAAA,QAAA,CAAA,4LAAA,EAAA,CAAA;EAAA;;;6EAQvB,yBAAuB,EAAA,WAAA,2BAAA,UAAA,+EAAA,YAAA,GAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

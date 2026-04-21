@@ -5,11 +5,7 @@
 
   <!-- Photo -->
   <div class="tcard__photo">
-    @if (teacher().photo) {
-      <img [src]="teacher().photo" [alt]="teacher().full_name" />
-    } @else {
-      <mat-icon class="tcard__photo-icon">person</mat-icon>
-    }
+    <img [src]="teacher().photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="teacher().full_name" />
     @if (teacher().is_verified) {
       <span class="tcard__verified" matTooltip="Verified teacher">
         <mat-icon>verified</mat-icon>

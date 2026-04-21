@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;b18b8a8f733df1ccbe877cb9c64cc3dae1d9710bfc40ecf331a36784ef28a171;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/shared/components/difficulty-bar/difficulty-bar.component.ts"],
-  "sourcesContent": ["\n    .diff-bar { display:flex; align-items:center; gap:10px; }\n    .diff-bar__track {\n      flex:1; height:8px; background:var(--color-border);\n      border-radius:4px; overflow:hidden;\n    }\n    .diff-bar__fill {\n      height:100%; border-radius:4px;\n      background:linear-gradient(90deg,#43a047 0%,#fb8c00 60%,#e53935 100%);\n      transition:width .4s ease;\n    }\n    .diff-bar__label { font-size:.8rem; color:var(--color-text-muted); white-space:nowrap; }\n  "],
-  "mappings": ";AACI,CAAC;AAAW,WAAQ;AAAM,eAAY;AAAQ,OAAI;AAAM;AACxD,CAAC;AACC,QAAK;AAAG,UAAO;AAAK,cAAW,IAAI;AACnC,iBAAc;AAAK,YAAS;AAC9B;AACA,CAAC;AACC,UAAO;AAAM,iBAAc;AAC3B;AAAA,IAAW;AAAA,MAAgB,KAAhB;AAAA,MAAsB,QAAQ,EAA9B;AAAA,MAAiC,QAAQ,GAAzC;AAAA,MAA6C,QAAQ;AAChE,cAAW,MAAM,IAAI;AACvB;AACA,CAAC;AAAkB,aAAU;AAAO,SAAM,IAAI;AAAqB,eAAY;AAAQ;",
-  "names": []
-}

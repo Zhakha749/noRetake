@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;4c4e095dac962b538d43afc8259e53f7127843131d07d1a06d66ff95ea30ffb7;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/shared/components/rating-badge/rating-badge.component.ts"],
-  "sourcesContent": ["\n    .badge {\n      display: inline-flex; align-items: center; justify-content: center;\n      min-width: 44px; padding: 4px 10px;\n      border-radius: 20px; font-weight: 700; font-size: .9rem;\n    }\n    .badge-high { background:#e8f5e9; color:#2e7d32; }\n    .badge-mid  { background:#fff3e0; color:#e65100; }\n    .badge-low  { background:#ffebee; color:#c62828; }\n    .dark-theme .badge-high { background:#1b3a1f; color:#81c784; }\n    .dark-theme .badge-mid  { background:#3a2a00; color:#ffb74d; }\n    .dark-theme .badge-low  { background:#3a0a0a; color:#ef9a9a; }\n  "],
-  "mappings": ";AACI,CAAC;AACC,WAAS;AAAa,eAAa;AAAQ,mBAAiB;AAC5D,aAAW;AAAM,WAAS,IAAI;AAC9B,iBAAe;AAAM,eAAa;AAAK,aAAW;AACpD;AACA,CAAC;AAAa,cAAW;AAAS,SAAM;AAAS;AACjD,CAAC;AAAa,cAAW;AAAS,SAAM;AAAS;AACjD,CAAC;AAAa,cAAW;AAAS,SAAM;AAAS;AACjD,CAAC,WAAW,CAHX;AAGyB,cAAW;AAAS,SAAM;AAAS;AAC7D,CADC,WACW,CAHX;AAGyB,cAAW;AAAS,SAAM;AAAS;AAC7D,CAFC,WAEW,CAHX;AAGyB,cAAW;AAAS,SAAM;AAAS;",
-  "names": []
-}

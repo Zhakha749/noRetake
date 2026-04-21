@@ -2,63 +2,22 @@
   <!-- Brand -->
   <a routerLink="/" class="navbar__brand">
     <span class="navbar__brand-icon">🎓</span>
-    <span class="navbar__brand-text">KBTU<span class="navbar__brand-accent">Rate</span></span>
+    <span class="navbar__brand-text">WSP<span class="navbar__brand-accent">2</span></span>
   </a>
 
   <!-- Desktop nav links -->
-  <nav class="navbar__links hide-mobile">
-    <a mat-button routerLink="/teachers" routerLinkActive="nav-active">
-      <mat-icon>people</mat-icon> Teachers
-    </a>
-    <a mat-button routerLink="/subjects" routerLinkActive="nav-active">
-      <mat-icon>menu_book</mat-icon> Subjects
-    </a>
-  </nav>
+  @if (auth.isLoggedIn$ | async) {
+    <nav class="navbar__links hide-mobile">
+      <a mat-button routerLink="/teachers" routerLinkActive="nav-active">
+        <mat-icon>people</mat-icon> Teachers
+      </a>
+      <a mat-button routerLink="/subjects" routerLinkActive="nav-active">
+        <mat-icon>menu_book</mat-icon> Subjects
+      </a>
+    </nav>
+  }
 
   <span class="spacer"></span>
-
-  <!-- Global search -->
-  <div class="navbar__search">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
-      <mat-icon matPrefix>search</mat-icon>
-      <input
-        matInput
-        placeholder="Search teachers or subjects…"
-        [formControl]="searchCtrl"
-        [matAutocomplete]="searchAuto"
-        (keyup.enter)="onSearchSubmit()"
-      />
-      <mat-autocomplete
-        #searchAuto="matAutocomplete"
-        [displayWith]="displayFn"
-        (optionSelected)="onResultSelected($event.option.value)"
-      >
-        @if (isSearching) {
-          <mat-option disabled>
-            <span class="search-hint">Searching…</span>
-          </mat-option>
-        }
-        @for (result of searchResults; track result.id) {
-          <mat-option [value]="result">
-            <div class="search-result">
-              <mat-icon class="search-result__icon">
-                {{ result.type === 'teacher' ? 'person' : 'book' }}
-              </mat-icon>
-              <div class="search-result__text">
-                <span class="search-result__label">{{ result.label }}</span>
-                <span class="search-result__sub text-muted">{{ result.sublabel }}</span>
-              </div>
-            </div>
-          </mat-option>
-        }
-        @if (!isSearching && searchResults.length === 0 && (searchCtrl.value?.length ?? 0) >= 2) {
-          <mat-option disabled>
-            <span class="search-hint">No results found</span>
-          </mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
-  </div>
 
   <!-- Dark mode toggle -->
   <button
@@ -101,10 +60,10 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #mobileMenu="matMenu">
-    <a mat-menu-item routerLink="/teachers"><mat-icon>people</mat-icon> Teachers</a>
-    <a mat-menu-item routerLink="/subjects"><mat-icon>menu_book</mat-icon> Subjects</a>
-    <mat-divider />
     @if (auth.isLoggedIn$ | async) {
+      <a mat-menu-item routerLink="/teachers"><mat-icon>people</mat-icon> Teachers</a>
+      <a mat-menu-item routerLink="/subjects"><mat-icon>menu_book</mat-icon> Subjects</a>
+      <mat-divider />
       @if (auth.isAdmin()) {
         <a mat-menu-item routerLink="/admin-dashboard"><mat-icon>admin_panel_settings</mat-icon> Admin</a>
       }

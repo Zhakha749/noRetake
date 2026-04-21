@@ -16,11 +16,7 @@
 <header class="cd-overview page-container">
   <div class="cd-overview__left">
     <div class="cd-overview__photo">
-      @if (c.teacher.photo) {
-        <img [src]="c.teacher.photo" [alt]="c.teacher.full_name" />
-      } @else {
-        <mat-icon>person</mat-icon>
-      }
+      <img [src]="c.teacher.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="c.teacher.full_name" />
     </div>
     <div>
       <h1 class="cd-overview__subject">{{ c.subject.title }}</h1>

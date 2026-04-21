@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;c5d84e4ed3d1ac0732d3ed19cf35e6fc27c863138c3a8c74c092d645506a1fd7;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/features/admin-dashboard/reports/report-moderation.component.ts"],
-  "sourcesContent": ["\n    .rmod { max-width: 960px; }\n    .rmod__title { font-size: 1.5rem; font-weight: 800; margin: 0 0 24px; }\n    .rmod__spinner { display: flex; justify-content: center; padding: 60px 0; }\n    .rmod__empty {\n      display: flex; flex-direction: column; align-items: center;\n      gap: 12px; padding: 60px 0; color: var(--color-text-muted);\n      mat-icon { font-size: 48px; height: 48px; width: 48px; color: var(--color-success); }\n    }\n    .rmod__table { width: 100%; background: var(--color-surface); }\n    .rmod__excerpt { font-size: .85rem; font-style: italic; }\n    .rmod__reason  { font-size: .82rem; }\n    .rmod__count   { margin-top: 12px; }\n  "],
-  "mappings": ";AACI,CAAC;AAAO,aAAW;AAAO;AAC1B,CAAC;AAAc,aAAW;AAAQ,eAAa;AAAK,UAAQ,EAAE,EAAE;AAAM;AACtE,CAAC;AAAgB,WAAS;AAAM,mBAAiB;AAAQ,WAAS,KAAK;AAAG;AAC1E,CAAC;AACC,WAAS;AAAM,kBAAgB;AAAQ,eAAa;AACpD,OAAK;AAAM,WAAS,KAAK;AAAG,SAAO,IAAI;AACvC;AAAW,eAAW;AAAM,YAAQ;AAAM,WAAO;AAAM,WAAO,IAAI;AAAkB;AACtF;AACA,CAAC;AAAc,SAAO;AAAM,cAAY,IAAI;AAAkB;AAC9D,CAAC;AAAgB,aAAW;AAAQ,cAAY;AAAQ;AACxD,CAAC;AAAgB,aAAW;AAAQ;AACpC,CAAC;AAAgB,cAAY;AAAM;",
-  "names": []
-}

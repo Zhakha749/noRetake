@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/auth/login/login.component.scss"],
-  "sourcesContent": [".auth-page {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: calc(100vh - 64px - 80px);\n  padding: 32px 16px;\n}\n\n.auth-card {\n  width: 100%;\n  max-width: 420px;\n  padding: 40px 36px;\n\n  &__header { text-align: center; margin-bottom: 28px; }\n\n  &__title {\n    font-size: 1.6rem;\n    font-weight: 700;\n    margin: 0 0 6px;\n    color: var(--color-text);\n  }\n\n  &__form {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n  }\n\n  &__submit {\n    margin-top: 12px;\n    height: 44px;\n    font-size: 1rem;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 8px;\n  }\n\n  &__footer {\n    text-align: center;\n    margin-top: 20px;\n    font-size: .9rem;\n  }\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,mBAAA;AACA,cAAA,KAAA,MAAA,EAAA,KAAA,EAAA;AACA,WAAA,KAAA;;AAGF,CAAA;AACE,SAAA;AACA,aAAA;AACA,WAAA,KAAA;;AAEA,CAAA;AAAY,cAAA;AAAoB,iBAAA;;AAEhC,CAAA;AACE,aAAA;AACA,eAAA;AACA,UAAA,EAAA,EAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA;;AAGF,CAAA;AACE,cAAA;AACA,UAAA;AACA,aAAA;AACA,WAAA;AACA,eAAA;AACA,mBAAA;AACA,OAAA;;AAGF,CAAA;AACE,cAAA;AACA,cAAA;AACA,aAAA;;",
-  "names": []
-}

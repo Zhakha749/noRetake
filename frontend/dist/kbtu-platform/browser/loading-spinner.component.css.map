@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;ea3d77712b5ed6e304e1f999ea93f331d1a28f92c44c4fd01fa002dd21a7a81a;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/shared/components/loading-spinner/loading-spinner.component.ts"],
-  "sourcesContent": [".spinner-wrap { display:flex; align-items:center; justify-content:center; width:100%; }"],
-  "mappings": ";AAAA,CAAC;AAAe,WAAQ;AAAM,eAAY;AAAQ,mBAAgB;AAAQ,SAAM;AAAM;",
-  "names": []
-}

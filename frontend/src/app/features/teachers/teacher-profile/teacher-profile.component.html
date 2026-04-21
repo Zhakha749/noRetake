@@ -8,13 +8,7 @@
   <header class="profile__header">
     <div class="page-container profile__header-inner">
       <div class="profile__photo-wrap">
-        @if (t.photo) {
-          <img class="profile__photo" [src]="t.photo" [alt]="t.full_name" />
-        } @else {
-          <div class="profile__photo profile__photo--placeholder">
-            <mat-icon>person</mat-icon>
-          </div>
-        }
+        <img class="profile__photo" [src]="t.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="t.full_name" />
       </div>
 
       <div class="profile__hero-info">

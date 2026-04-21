@@ -3,74 +3,72 @@
 
 @include mat.core();
 
-// Light theme palette
-$light-primary: mat.define-palette(mat.$indigo-palette, 700);
-$light-accent:  mat.define-palette(mat.$amber-palette, A200, A100, A400);
-$light-warn:    mat.define-palette(mat.$red-palette);
+$primary: mat.define-palette(mat.$indigo-palette, 700);
+$accent:  mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$warn:    mat.define-palette(mat.$red-palette);
 
-$light-theme: mat.define-light-theme((
-  color: (primary: $light-primary, accent: $light-accent, warn: $light-warn),
-  typography: mat.define-typography-config($font-family: 'Inter, sans-serif'),
-  density: 0,
-));
-
-// Dark theme palette
 $dark-primary: mat.define-palette(mat.$indigo-palette, 300);
 $dark-accent:  mat.define-palette(mat.$amber-palette, A200);
 
-$dark-theme: mat.define-dark-theme((
-  color: (primary: $dark-primary, accent: $dark-accent, warn: $light-warn),
+$light-theme: mat.define-light-theme((
+  color: (primary: $primary, accent: $accent, warn: $warn),
   typography: mat.define-typography-config($font-family: 'Inter, sans-serif'),
   density: 0,
 ));
 
-// Apply light theme globally
-@include mat.all-component-themes($light-theme);
+$dark-theme: mat.define-dark-theme((
+  color: (primary: $dark-primary, accent: $dark-accent, warn: $warn),
+  typography: mat.define-typography-config($font-family: 'Inter, sans-serif'),
+  density: 0,
+));
 
-// Apply dark theme when class is present on body
-.dark-theme {
-  @include mat.all-component-colors($dark-theme);
+// Dark is the default global theme
+@include mat.all-component-themes($dark-theme);
+
+// Light Material theme when user switches off dark mode
+body:not(.dark-theme) {
+  @include mat.all-component-colors($light-theme);
 }
 
 // ── CSS custom properties ────────────────────────────────────────────────────
+// Dark Gumroad palette — default (dark mode)
 :root {
-  --color-bg:           #f5f5f5;
-  --color-surface:      #ffffff;
-  --color-surface-2:    #fafafa;
-  --color-border:       #e0e0e0;
-  --color-text:         #212121;
-  --color-text-muted:   #757575;
-  --color-primary:      #3949ab;
-  --color-accent:       #ffd740;
-  --color-success:      #43a047;
-  --color-warning:      #fb8c00;
-  --color-error:        #e53935;
-  --color-rating-high:  #43a047;
-  --color-rating-mid:   #fb8c00;
-  --color-rating-low:   #e53935;
-  --radius-sm:  6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,.10);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
-  --transition: 200ms ease;
+  --color-bg:           #000000;
+  --color-surface:      #111111;
+  --color-surface-2:    #1a1a1a;
+  --color-border:       #2a2a2a;
+  --color-text:         #ffffff;
+  --color-text-muted:   #777777;
+  --color-primary:      #ff90e8;
+  --color-accent:       #ff90e8;
+  --color-success:      #00e676;
+  --color-warning:      #ffea00;
+  --color-error:        #ff1744;
+  --color-rating-high:  #00e676;
+  --color-rating-mid:   #ffea00;
+  --color-rating-low:   #ff1744;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --shadow-sm: 2px 2px 0 #ffffff30;
+  --shadow-md: 4px 4px 0 #ffffff;
+  --shadow-lg: 6px 6px 0 #ffffff;
+  --transition: 120ms ease;
 }
 
-.dark-theme {
-  --color-bg:          #121212;
-  --color-surface:     #1e1e1e;
-  --color-surface-2:   #2a2a2a;
-  --color-border:      #333333;
-  --color-text:        #e0e0e0;
-  --color-text-muted:  #9e9e9e;
-  --color-primary:     #7986cb;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,.4);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,.5);
+// Light brutalist variant — when dark mode is OFF
+body:not(.dark-theme) {
+  --color-bg:           #ffffff;
+  --color-surface:      #f8f8f8;
+  --color-surface-2:    #eeeeee;
+  --color-border:       #dddddd;
+  --color-text:         #000000;
+  --color-text-muted:   #555555;
+  --shadow-md: 4px 4px 0 #000000;
+  --shadow-lg: 6px 6px 0 #000000;
 }
 
-// ── Global resets ────────────────────────────────────────────────────────────
+// ── Global resets ─────────────────────────────────────────────────────────────
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
@@ -80,7 +78,6 @@ html, body {
   font-size: 16px;
   background: var(--color-bg);
   color: var(--color-text);
-  transition: background var(--transition), color var(--transition);
 }
 
 a {
@@ -96,21 +93,27 @@ a {
   padding: 24px 16px;
 }
 
+// Gumroad brutalist card
 .card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition);
-  &:hover { box-shadow: var(--shadow-md); }
+  box-shadow: none;
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+
+  &:hover {
+    border-color: var(--color-text);
+    box-shadow: var(--shadow-md);
+    transform: translate(-2px, -2px);
+  }
 }
 
-// ── Rating badge colours ─────────────────────────────────────────────────────
+// ── Rating colors ─────────────────────────────────────────────────────────────
 .rating-high { color: var(--color-rating-high); }
 .rating-mid  { color: var(--color-rating-mid); }
 .rating-low  { color: var(--color-rating-low); }
 
-// ── Utility ──────────────────────────────────────────────────────────────────
+// ── Utilities ─────────────────────────────────────────────────────────────────
 .text-muted  { color: var(--color-text-muted); font-size: .875rem; }
 .flex-center { display: flex; align-items: center; justify-content: center; }
 .gap-8  { gap: 8px; }
@@ -119,10 +122,143 @@ a {
 .mt-24  { margin-top: 24px; }
 .w-full { width: 100%; }
 
-// ── Material overrides ───────────────────────────────────────────────────────
+// ── Angular Material overrides — Gumroad brutalist ────────────────────────────
+
+// Primary + accent raised buttons → pink bg, black text
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary,
+.mat-mdc-raised-button.mat-accent,
+.mat-mdc-flat-button.mat-accent {
+  --mdc-filled-button-container-color: #ff90e8 !important;
+  --mdc-filled-button-label-text-color: #000000 !important;
+  border: 2px solid var(--color-text) !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+}
+
+// Stroked buttons
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: var(--color-border) !important;
+  --mdc-outlined-button-label-text-color: var(--color-text) !important;
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+  &:hover {
+    --mdc-outlined-button-outline-color: var(--color-text) !important;
+  }
+}
+
+// Text buttons (mat-button)
+.mat-mdc-button {
+  color: var(--color-text) !important;
+  font-weight: 700 !important;
+}
+
+// Icon buttons
+.mat-mdc-icon-button {
+  color: var(--color-text-muted) !important;
+  &:hover { color: var(--color-text) !important; }
+}
+
+// Toolbar
+.mat-toolbar {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+// Form fields (outlined)
+.mat-mdc-form-field {
+  width: 100%;
+  --mdc-outlined-text-field-outline-color:         var(--color-border);
+  --mdc-outlined-text-field-hover-outline-color:   var(--color-text);
+  --mdc-outlined-text-field-focus-outline-color:   #ff90e8;
+  --mdc-outlined-text-field-input-text-color:      var(--color-text);
+  --mdc-outlined-text-field-label-text-color:      var(--color-text-muted);
+  --mdc-outlined-text-field-focus-label-text-color: #ff90e8;
+  --mdc-outlined-text-field-container-shape:       4px;
+  --mdc-outlined-text-field-caret-color:           #ff90e8;
+  --mat-form-field-container-text-color:           var(--color-text);
+  --mat-select-trigger-text-color:                 var(--color-text);
+  --mat-select-placeholder-text-color:             var(--color-text-muted);
+}
+
+// Icon inside form field
+.mat-mdc-form-field mat-icon { color: var(--color-text-muted); }
+
+// Select panel dropdown
+.mat-mdc-select-panel {
+  background: #111111 !important;
+  border: 2px solid #333 !important;
+  border-radius: 4px !important;
+}
+.mat-mdc-option {
+  color: #ffffff !important;
+  &.mdc-list-item--selected { background: #1a1a1a !important; }
+  &:hover:not(.mdc-list-item--disabled) { background: #222222 !important; }
+}
+
+// Checkboxes
+.mat-mdc-checkbox {
+  --mdc-checkbox-selected-icon-color:        #ff90e8;
+  --mdc-checkbox-selected-hover-icon-color:  #ff90e8;
+  --mdc-checkbox-selected-focus-icon-color:  #ff90e8;
+  --mdc-checkbox-selected-checkmark-color:   #000;
+  --mdc-checkbox-unselected-icon-color:      #555;
+  --mdc-checkbox-unselected-hover-icon-color: #fff;
+  .mdc-label { color: var(--color-text) !important; }
+}
+
+// Paginator
+.mat-mdc-paginator {
+  background: transparent !important;
+  color: var(--color-text) !important;
+  border-top: 2px solid var(--color-border);
+  margin-top: 16px;
+
+  .mat-mdc-icon-button { color: var(--color-text) !important; }
+  .mat-mdc-select-trigger { color: var(--color-text) !important; }
+}
+
+// Menu panel
+.mat-mdc-menu-panel {
+  background: #111111 !important;
+  border: 2px solid #333333 !important;
+  border-radius: 4px !important;
+  box-shadow: 4px 4px 0 #333 !important;
+}
+.mat-mdc-menu-item {
+  color: #ffffff !important;
+  &:hover { background: #222222 !important; }
+  mat-icon { color: #888 !important; }
+}
+
+// Divider
+.mat-divider { border-top-color: #2a2a2a !important; }
+
+// Autocomplete panel
+.mat-mdc-autocomplete-panel {
+  background: #111111 !important;
+  border: 2px solid #333 !important;
+  border-radius: 0 0 4px 4px !important;
+}
+
+// Tooltip
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  background: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+}
+
+// Progress spinner → pink
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #ff90e8 !important;
+}
+
+// Snackbar error
 .mat-mdc-snack-bar-container.error-snack {
   --mdc-snackbar-container-color: var(--color-error);
   --mdc-snackbar-supporting-text-color: #fff;
 }
-
-.mat-mdc-form-field { width: 100%; }

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/footer/footer.component.scss"],
-  "sourcesContent": [".footer {\n  background: var(--color-surface);\n  border-top: 1px solid var(--color-border);\n  margin-top: auto;\n\n  &__inner {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    justify-content: space-between;\n    gap: 16px;\n    padding-top: 24px;\n    padding-bottom: 24px;\n  }\n\n  &__logo { font-weight: 700; font-size: 1rem; }\n\n  &__links {\n    display: flex;\n    gap: 20px;\n\n    a {\n      color: var(--color-text-muted);\n      font-size: .875rem;\n      &:hover { color: var(--color-primary); }\n    }\n  }\n\n  &__copy { font-size: .75rem; width: 100%; text-align: center; }\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,cAAA,IAAA;AACA,cAAA,IAAA,MAAA,IAAA;AACA,cAAA;;AAEA,CAAA;AACE,WAAA;AACA,aAAA;AACA,eAAA;AACA,mBAAA;AACA,OAAA;AACA,eAAA;AACA,kBAAA;;AAGF,CAAA;AAAU,eAAA;AAAkB,aAAA;;AAE5B,CAAA;AACE,WAAA;AACA,OAAA;;AAEA,CAJF,cAIE;AACE,SAAA,IAAA;AACA,aAAA;;AACA,CAPJ,cAOI,CAAA;AAAU,SAAA,IAAA;;AAId,CAAA;AAAU,aAAA;AAAmB,SAAA;AAAa,cAAA;;",
-  "names": []
-}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;3475e83daf725d5cf1aaa00f1dc2e7df66772ee0b16348a028b08b036df78231;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/shared/components/radar-chart/radar-chart.component.ts"],
-  "sourcesContent": [".radar-wrap { position:relative; }"],
-  "mappings": ";AAAA,CAAC;AAAa,YAAS;AAAU;",
-  "names": []
-}

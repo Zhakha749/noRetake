@@ -3,21 +3,45 @@
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 64px - 80px);
-  padding: 32px 16px;
+  padding: 40px 16px;
+  background: #000;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 420px;
-  padding: 40px 36px;
+  max-width: 440px;
+  padding: 44px 40px;
+  background: #111 !important;
+  border: 2px solid #2a2a2a !important;
+  border-radius: 4px !important;
+  box-shadow: 6px 6px 0 #1f1f1f !important;
+  transition: none !important;
 
-  &__header { text-align: center; margin-bottom: 28px; }
+  &:hover {
+    transform: none !important;
+    box-shadow: 6px 6px 0 #1f1f1f !important;
+    border-color: #2a2a2a !important;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
 
   &__title {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin: 0 0 6px;
-    color: var(--color-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: -.02em;
+    color: #ffffff;
+  }
+
+  p.text-muted {
+    font-size: .88rem;
+    color: #555;
+    margin: 0;
   }
 
   &__form {
@@ -27,18 +51,29 @@
   }
 
   &__submit {
-    margin-top: 12px;
-    height: 44px;
-    font-size: 1rem;
+    margin-top: 16px;
+    height: 48px;
+    font-size: .88rem;
+    font-weight: 800 !important;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    text-transform: uppercase !important;
+    letter-spacing: .1em !important;
   }
 
   &__footer {
     text-align: center;
-    margin-top: 20px;
-    font-size: .9rem;
+    margin-top: 24px;
+    font-size: .88rem;
+    color: #555;
+
+    a {
+      color: #ff90e8;
+      font-weight: 700;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
   }
 }

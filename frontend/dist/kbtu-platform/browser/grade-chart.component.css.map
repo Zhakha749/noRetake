@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;7fc69065bca5a24432c5f990b62028419f0c916d8d5b73a0189164964918eece;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/shared/components/grade-chart/grade-chart.component.ts"],
-  "sourcesContent": [".chart-wrap { position:relative; height:260px; }"],
-  "mappings": ";AAAA,CAAC;AAAa,YAAS;AAAU,UAAO;AAAO;",
-  "names": []
-}

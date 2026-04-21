@@ -32,11 +32,7 @@
       @for (c of courses(); track c.id) {
         <div class="cmp__course-col card cmp__header-card">
           <div class="cmp__teacher-photo">
-            @if (c.teacher.photo) {
-              <img [src]="c.teacher.photo" [alt]="c.teacher.full_name" />
-            } @else {
-              <mat-icon>person</mat-icon>
-            }
+            <img [src]="c.teacher.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="c.teacher.full_name" />
           </div>
           <h2 class="cmp__course-title">{{ c.subject.title }}</h2>
           <a class="cmp__teacher-link" [routerLink]="['/teachers', c.teacher.id]">

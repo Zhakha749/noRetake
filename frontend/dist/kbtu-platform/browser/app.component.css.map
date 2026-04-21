@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["angular:styles/component:css;1d6c24b15e5745eaba74963ce696ea07b53fe23d2937925f7931fea80d4bab4d;C:/Users/Bagdat/OneDrive/Desktop/kbtupromt/frontend/src/app/app.component.ts"],
-  "sourcesContent": ["\n    :host { display: flex; flex-direction: column; min-height: 100vh; }\n    .app-main { flex: 1; }\n  "],
-  "mappings": ";AACI;AAAQ,WAAS;AAAM,kBAAgB;AAAQ,cAAY;AAAO;AAClE,CAAC;AAAW,QAAM;AAAG;",
-  "names": []
-}
