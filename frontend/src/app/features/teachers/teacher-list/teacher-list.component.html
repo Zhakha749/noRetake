@@ -4,20 +4,25 @@
   <aside class="tlist__sidebar card">
     <h2 class="tlist__sidebar-title">Filters</h2>
 
-    <!-- Search -->
+    <!-- Search — [(ngModel)] #1 -->
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Search by name</mat-label>
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput [formControl]="$any(filters.get('search'))" placeholder="e.g. Nabiev" />
+      <input matInput
+             [(ngModel)]="searchValue"
+             (ngModelChange)="onFilterChange()"
+             placeholder="e.g. Nabiev" />
     </mat-form-field>
 
     <mat-divider />
 
-    <!-- Age range -->
+    <!-- Age range — [(ngModel)] #2–6 (one per checkbox) -->
     <div class="tlist__filter-group">
       <h3 class="tlist__filter-label">Age range</h3>
       @for (range of ageRanges; track range) {
-        <mat-checkbox [formControl]="$any(filters.get('ageRanges')!.get(range))">
+        <mat-checkbox
+          [(ngModel)]="ageRangeModel[range]"
+          (ngModelChange)="onFilterChange()">
           {{ range }}
         </mat-checkbox>
       }
@@ -25,12 +30,14 @@
 
     <mat-divider />
 
-    <!-- Subject filter -->
+    <!-- Subject filter — [(ngModel)] #7 -->
     <div class="tlist__filter-group">
       <h3 class="tlist__filter-label">Subject</h3>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Any subject</mat-label>
-        <mat-select [formControl]="$any(filters.get('subjectId'))">
+        <mat-select
+          [(ngModel)]="selectedSubject"
+          (ngModelChange)="onFilterChange()">
           <mat-option [value]="null">Any subject</mat-option>
           @for (s of subjects(); track s.id) {
             <mat-option [value]="s.id">{{ s.title }}</mat-option>
@@ -41,11 +48,13 @@
 
     <mat-divider />
 
-    <!-- Sort -->
+    <!-- Sort — [(ngModel)] #8 -->
     <div class="tlist__filter-group">
       <h3 class="tlist__filter-label">Sort by</h3>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-select [formControl]="$any(filters.get('ordering'))">
+        <mat-select
+          [(ngModel)]="selectedOrdering"
+          (ngModelChange)="onFilterChange()">
           @for (opt of sortOptions; track opt.value) {
             <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
           }

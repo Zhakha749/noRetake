@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,7 +24,7 @@ const AGE_RANGES = ['20-30', '30-40', '40-50', '50-60', '60+'];
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule, ReactiveFormsModule,
+    CommonModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatCheckboxModule,
     MatSelectModule, MatButtonModule, MatIconModule,
     MatPaginatorModule, MatDividerModule,
@@ -36,9 +36,9 @@ const AGE_RANGES = ['20-30', '30-40', '40-50', '50-60', '60+'];
 export class TeacherListComponent implements OnInit, OnDestroy {
   private readonly svc        = inject(TeacherService);
   private readonly subjectSvc = inject(SubjectService);
-  private readonly fb         = inject(FormBuilder);
   private readonly route      = inject(ActivatedRoute);
   private readonly destroy$   = new Subject<void>();
+  private readonly change$    = new Subject<void>();
 
   readonly ageRanges = AGE_RANGES;
 
@@ -49,35 +49,38 @@ export class TeacherListComponent implements OnInit, OnDestroy {
   pageSize  = 20;
   pageIndex = 0;
 
-  filters = this.fb.group({
-    search:    [''],
-    ageRanges: this.fb.group(Object.fromEntries(AGE_RANGES.map(r => [r, false]))),
-    subjectId: [null as number | null],
-    ordering:  ['-average_ratings__overall'],
-  });
+  // ── [(ngModel)] bound properties ──────────────────────────────────────────
+  searchValue      = '';
+  ageRangeModel: Record<string, boolean> = Object.fromEntries(AGE_RANGES.map(r => [r, false]));
+  selectedSubject: number | null = null;
+  selectedOrdering = '-avg_overall';
+  // ──────────────────────────────────────────────────────────────────────────
 
   readonly sortOptions = [
-    { value: '-average_ratings__overall', label: 'Highest rating' },
-    { value: 'average_ratings__overall',  label: 'Lowest rating' },
-    { value: 'full_name',                 label: 'Name A → Z' },
-    { value: '-full_name',                label: 'Name Z → A' },
+    { value: '-avg_overall', label: 'Highest rating' },
+    { value: 'avg_overall',  label: 'Lowest rating' },
+    { value: 'full_name',    label: 'Name A → Z' },
+    { value: '-full_name',   label: 'Name Z → A' },
   ];
 
   ngOnInit(): void {
     const qSearch = this.route.snapshot.queryParamMap.get('search');
-    if (qSearch) this.filters.get('search')!.setValue(qSearch);
+    if (qSearch) this.searchValue = qSearch;
 
     this.subjectSvc.getAll().subscribe(r => this.subjects.set(r.results));
 
-    this.filters.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-      startWith(this.filters.value),
-      takeUntil(this.destroy$),
-    ).subscribe(() => { this.pageIndex = 0; this.fetch(); });
+    this.change$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
+      this.pageIndex = 0;
+      this.fetch();
+    });
+
+    // initial load
+    this.change$.next();
   }
 
   ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
+
+  onFilterChange(): void { this.change$.next(); }
 
   onPageChange(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
@@ -86,22 +89,22 @@ export class TeacherListComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.filters.reset({
-      search: '', ageRanges: Object.fromEntries(AGE_RANGES.map(r => [r, false])),
-      subjectId: null, ordering: '-average_ratings__overall',
-    });
+    this.searchValue      = '';
+    this.ageRangeModel    = Object.fromEntries(AGE_RANGES.map(r => [r, false]));
+    this.selectedSubject  = null;
+    this.selectedOrdering = '-avg_overall';
+    this.onFilterChange();
   }
 
   private fetch(): void {
     this.loading.set(true);
-    const { search, ageRanges, subjectId, ordering } = this.filters.value;
-    const selectedAges = AGE_RANGES.filter(r => (ageRanges as Record<string, boolean>)[r]);
+    const selectedAges = AGE_RANGES.filter(r => this.ageRangeModel[r]);
 
     this.svc.getAll({
-      search:    search || undefined,
+      search:    this.searchValue || undefined,
       age_range: selectedAges.length === 1 ? selectedAges[0] : undefined,
-      subject:   subjectId ?? undefined,
-      ordering:  ordering || undefined,
+      subject:   this.selectedSubject ?? undefined,
+      ordering:  this.selectedOrdering || undefined,
       page:      this.pageIndex + 1,
     }).subscribe({
       next: res => { this.teachers.set(res.results); this.total.set(res.count); this.loading.set(false); },

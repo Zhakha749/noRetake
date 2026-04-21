@@ -6,6 +6,17 @@ from .models import StudyMaterial
 from .serializers import StudyMaterialSerializer, AdminStudyMaterialSerializer
 
 
+class StudyMaterialDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """GET /materials/<pk>/ — retrieve. PUT/PATCH/DELETE — requires authentication."""
+    queryset = StudyMaterial.objects.all()
+    serializer_class = StudyMaterialSerializer
+
+    def get_permissions(self):
+        if self.request.method in ('PUT', 'PATCH', 'DELETE'):
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+
+
 class StudyMaterialListCreateView(generics.ListCreateAPIView):
     serializer_class = StudyMaterialSerializer
     filter_backends = [DjangoFilterBackend]
