@@ -59,6 +59,22 @@
   &__mat-type { font-size: .68rem; }
   &__mat-meta { font-size: .78rem; }
 
+  &__file-upload {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+
+  &__file-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: .82rem; font-weight: 600; cursor: pointer;
+    color: var(--color-text);
+    transition: border-color var(--transition);
+    &:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    mat-icon { font-size: 16px; height: 16px; width: 16px; }
+  }
+
   // Teacher table
   &__table { width: 100%; }
 }

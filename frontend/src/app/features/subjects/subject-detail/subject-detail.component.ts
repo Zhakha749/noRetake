@@ -51,6 +51,8 @@ export class SubjectDetailComponent implements OnInit {
 
   readonly teacherCols = ['teacher_name', 'avg_difficulty', 'avg_rating', 'grade_avg', 'actions'];
 
+  selectedFile = signal<File | null>(null);
+
   materialForm = this.fb.group({
     title: ['', Validators.required],
     type:  ['lecture', Validators.required],
@@ -93,18 +95,30 @@ export class SubjectDetailComponent implements OnInit {
     this.showMaterialForm.update(v => !v);
   }
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile.set(input.files?.[0] ?? null);
+  }
+
   submitMaterial(): void {
     if (this.materialForm.invalid) { this.materialForm.markAllAsTouched(); return; }
+    const link = this.materialForm.value.link ?? '';
+    if (!link && !this.selectedFile()) {
+      this.snack.open('Please provide a link or upload a file.', 'Close', { duration: 4000, panelClass: ['error-snack'] });
+      return;
+    }
     this.submittingMaterial.set(true);
     const fd = new FormData();
     fd.append('title',   this.materialForm.value.title!);
     fd.append('type',    this.materialForm.value.type!);
-    fd.append('link',    this.materialForm.value.link ?? '');
     fd.append('subject', this.id());
+    if (link) fd.append('link', link);
+    if (this.selectedFile()) fd.append('file', this.selectedFile()!);
     this.materialSvc.submit(fd).subscribe({
       next: () => {
         this.snack.open('Material submitted for review!', 'Close', { duration: 4000 });
         this.materialForm.reset({ type: 'lecture' });
+        this.selectedFile.set(null);
         this.showMaterialForm.set(false);
         this.submittingMaterial.set(false);
       },

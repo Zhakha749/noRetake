@@ -1,4 +1,4 @@
-.tcard {
+﻿.tcard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,13 +31,13 @@
     &-icon { font-size: 44px; color: var(--color-text-muted); }
   }
 
-  &:hover &__photo { border-color: #ff90e8; }
+  &:hover &__photo { border-color: #ff6b00; }
 
   &__verified {
     position: absolute;
     bottom: 0;
     right: 0;
-    background: #ff90e8;
+    background: #ff6b00;
     border-radius: 50%;
     width: 22px;
     height: 22px;

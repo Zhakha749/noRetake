@@ -27,7 +27,13 @@ class SubjectDetailSerializer(serializers.ModelSerializer):
         from apps.courses.models import CourseInstance
         from apps.reviews.models import Review
 
-        instances = CourseInstance.objects.filter(subject=obj).select_related('teacher').distinct('teacher')
+        seen = set()
+        all_instances = CourseInstance.objects.filter(subject=obj).select_related('teacher')
+        instances = []
+        for ci in all_instances:
+            if ci.teacher_id not in seen:
+                seen.add(ci.teacher_id)
+                instances.append(ci)
         result = []
         for ci in instances:
             teacher = ci.teacher

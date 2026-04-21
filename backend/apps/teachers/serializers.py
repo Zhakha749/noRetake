@@ -4,7 +4,8 @@ from .models import Teacher
 
 class TeacherListSerializer(serializers.ModelSerializer):
     average_ratings = serializers.SerializerMethodField()
-    review_count = serializers.SerializerMethodField()
+    review_count    = serializers.SerializerMethodField()
+    photo           = serializers.SerializerMethodField()
 
     class Meta:
         model = Teacher
@@ -12,6 +13,12 @@ class TeacherListSerializer(serializers.ModelSerializer):
             'id', 'full_name', 'photo', 'age_range', 'is_verified',
             'gender_bias_score', 'average_ratings', 'review_count',
         )
+
+    def get_photo(self, obj):
+        if not obj.photo:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.photo.url) if request else obj.photo.url
 
     def get_average_ratings(self, obj):
         return obj.get_average_ratings()
@@ -22,10 +29,11 @@ class TeacherListSerializer(serializers.ModelSerializer):
 
 
 class TeacherDetailSerializer(serializers.ModelSerializer):
-    average_ratings = serializers.SerializerMethodField()
+    average_ratings  = serializers.SerializerMethodField()
     teaching_history = serializers.SerializerMethodField()
-    review_count = serializers.SerializerMethodField()
+    review_count     = serializers.SerializerMethodField()
     show_gender_bias = serializers.SerializerMethodField()
+    photo            = serializers.SerializerMethodField()
 
     class Meta:
         model = Teacher
@@ -34,6 +42,12 @@ class TeacherDetailSerializer(serializers.ModelSerializer):
             'gender_bias_score', 'average_ratings', 'teaching_history',
             'review_count', 'show_gender_bias',
         )
+
+    def get_photo(self, obj):
+        if not obj.photo:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.photo.url) if request else obj.photo.url
 
     def get_average_ratings(self, obj):
         return obj.get_average_ratings()

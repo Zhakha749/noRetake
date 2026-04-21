@@ -1,9 +1,9 @@
-.navbar {
+﻿.navbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #000000 !important;
-  border-bottom: 2px solid #1f1f1f;
+  background: var(--color-bg) !important;
+  border-bottom: 2px solid var(--color-border);
   height: 64px;
   padding: 0 16px;
   gap: 8px;
@@ -17,14 +17,14 @@
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-size: 1.25rem;
-    color: #ffffff;
+    color: var(--color-text);
     white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: .04em;
 
     &-icon { font-size: 1.3rem; }
 
-    &-accent { color: #ff90e8; }
+    &-accent { color: #ff6b00; }
 
     &:hover { text-decoration: none; }
   }
@@ -40,7 +40,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      color: #777777;
+      color: var(--color-text-muted);
       font-weight: 700;
       font-size: .82rem;
       text-transform: uppercase;
@@ -52,13 +52,13 @@
       transition: color 120ms ease, border-color 120ms ease;
 
       &.nav-active {
-        color: #ff90e8;
-        border-color: #ff90e8;
+        color: #ff6b00;
+        border-color: #ff6b00;
       }
 
       &:hover:not(.nav-active) {
-        color: #ffffff;
-        border-color: #333;
+        color: var(--color-text);
+        border-color: var(--color-border);
         text-decoration: none;
       }
 
@@ -73,13 +73,13 @@
   }
 
   &__icon-btn {
-    color: #777 !important;
-    &:hover { color: #fff !important; }
+    color: var(--color-text-muted) !important;
+    &:hover { color: var(--color-text) !important; }
   }
 
   // ── Log in link ────────────────────────────────────────────────────────────
   a[routerLink="/login"].mat-mdc-button {
-    color: #aaa !important;
+    color: var(--color-text-muted) !important;
     font-size: .82rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -89,19 +89,19 @@
   // ── Sign up button → pink brutalist ───────────────────────────────────────
   a[routerLink="/register"] {
     &.mat-mdc-raised-button {
-      background: #ff90e8 !important;
+      background: #ff6b00 !important;
       color: #000 !important;
-      border: 2px solid #ffffff !important;
+      border: 2px solid var(--color-text) !important;
       border-radius: 4px !important;
       font-weight: 800 !important;
       font-size: .82rem !important;
       text-transform: uppercase !important;
       letter-spacing: .08em !important;
-      box-shadow: 2px 2px 0 #ffffff !important;
+      box-shadow: 2px 2px 0 var(--color-text) !important;
       transition: box-shadow 120ms ease, transform 120ms ease !important;
 
       &:hover {
-        box-shadow: 0 0 0 #ffffff !important;
+        box-shadow: 0 0 0 var(--color-text) !important;
         transform: translate(2px, 2px) !important;
       }
     }
@@ -121,7 +121,7 @@
     font-size: 18px;
     height: 18px;
     width: 18px;
-    color: #555;
+    color: var(--color-text-muted);
   }
 
   &__text {
@@ -130,14 +130,14 @@
     line-height: 1.3;
   }
 
-  &__label { font-weight: 700; font-size: .88rem; color: #fff; }
+  &__label { font-weight: 700; font-size: .88rem; color: var(--color-text); }
 
-  &__sub { font-size: .72rem; text-transform: capitalize; color: #777; }
+  &__sub { font-size: .72rem; text-transform: capitalize; color: var(--color-text-muted); }
 }
 
 .search-hint {
   font-size: .85rem;
-  color: #777;
+  color: var(--color-text-muted);
 }
 
 // ── Responsive ────────────────────────────────────────────────────────────────

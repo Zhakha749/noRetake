@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   stats        = signal({ teachers: 0, subjects: 0, reviews: 0 });
 
   ngOnInit(): void {
-    this.teacherSvc.getAll({ ordering: '-average_ratings__overall' }).subscribe(res => {
+    this.teacherSvc.getAll({ ordering: '-avg_overall' }).subscribe(res => {
       this.topTeachers.set(res.results.slice(0, 6));
       this.stats.update(s => ({ ...s, teachers: res.count }));
     });

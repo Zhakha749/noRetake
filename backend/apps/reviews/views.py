@@ -1,8 +1,12 @@
 from rest_framework import generics, permissions, status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Review, Report
-from .serializers import ReviewSerializer, ReportSerializer, AdminReportSerializer
+from .models import Review, Report, ReviewVote
+from .serializers import (
+    ReviewSerializer, ReportSerializer, AdminReportSerializer,
+    VoteSerializer, ReportInputSerializer,
+)
 
 
 class ReviewCreateView(generics.CreateAPIView):
@@ -10,49 +14,90 @@ class ReviewCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class ReviewReportView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+# ── FBV: голосование ──────────────────────────────────────────────────────────
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def review_vote(request, pk):
+    """
+    Голосование за отзыв. Правила:
+    - Повторное нажатие той же кнопки → снимает голос.
+    - Нажатие противоположной кнопки → меняет голос.
+    - helpful_votes может быть отрицательным.
+    """
+    try:
+        review = Review.objects.get(pk=pk)
+    except Review.DoesNotExist:
+        return Response({'error': 'Review not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, pk):
-        try:
-            review = Review.objects.get(pk=pk)
-        except Review.DoesNotExist:
-            return Response({'error': 'Review not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = ReportSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(review=review)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    serializer = VoteSerializer(data=request.data)
+    if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    new_value = 1 if serializer.validated_data['vote'] == 'up' else -1
+    existing  = ReviewVote.objects.filter(review=review, voter=request.user).first()
 
-class ReviewVoteView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, pk):
-        try:
-            review = Review.objects.get(pk=pk)
-        except Review.DoesNotExist:
-            return Response({'error': 'Review not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        vote = request.data.get('vote')  # 'up' or 'down'
-        if vote == 'up':
-            review.helpful_votes += 1
-        elif vote == 'down':
-            review.helpful_votes = max(0, review.helpful_votes - 1)
+    if existing:
+        if existing.value == new_value:
+            # Та же кнопка → снять голос
+            review.helpful_votes -= existing.value
+            review.save(update_fields=['helpful_votes'])
+            existing.delete()
         else:
-            return Response({'error': 'vote must be "up" or "down".'}, status=status.HTTP_400_BAD_REQUEST)
-
+            # Противоположная кнопка → переключить
+            review.helpful_votes -= existing.value
+            review.helpful_votes += new_value
+            review.save(update_fields=['helpful_votes'])
+            existing.value = new_value
+            existing.save(update_fields=['value'])
+    else:
+        # Новый голос
+        review.helpful_votes += new_value
         review.save(update_fields=['helpful_votes'])
-        return Response({'helpful_votes': review.helpful_votes})
+        ReviewVote.objects.create(review=review, voter=request.user, value=new_value)
+
+    # Возвращаем текущий голос пользователя (null если снят)
+    current_vote = ReviewVote.objects.filter(review=review, voter=request.user).first()
+    return Response({
+        'helpful_votes': review.helpful_votes,
+        'user_vote': current_vote.value if current_vote else None,
+    })
 
 
+# ── FBV: жалоба ──────────────────────────────────────────────────────────────
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def review_report(request, pk):
+    """Создать жалобу на отзыв."""
+    try:
+        review = Review.objects.get(pk=pk)
+    except Review.DoesNotExist:
+        return Response({'error': 'Review not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Проверяем входные данные через plain Serializer
+    input_ser = ReportInputSerializer(data=request.data)
+    if not input_ser.is_valid():
+        return Response(input_ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Один пользователь не может жаловаться дважды на один отзыв
+    if Report.objects.filter(review=review, reporter=request.user).exists():
+        return Response({'error': 'You have already reported this review.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    report = Report.objects.create(
+        review=review,
+        reporter=request.user,
+        reason=input_ser.validated_data['reason'],
+    )
+    return Response(ReportSerializer(report).data, status=status.HTTP_201_CREATED)
+
+
+# ── CBV: список жалоб (admin) ─────────────────────────────────────────────────
 class AdminReportListView(generics.ListAPIView):
     queryset = Report.objects.filter(status='open').select_related('review', 'reporter').order_by('-created_at')
     serializer_class = AdminReportSerializer
     permission_classes = [permissions.IsAdminUser]
 
 
+# ── CBV: действие по жалобе (admin) ──────────────────────────────────────────
 class AdminReportActionView(APIView):
     permission_classes = [permissions.IsAdminUser]
 

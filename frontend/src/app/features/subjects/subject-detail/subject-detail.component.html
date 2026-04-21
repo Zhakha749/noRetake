@@ -82,6 +82,21 @@
             <mat-icon matPrefix>link</mat-icon>
             <input matInput formControlName="link" placeholder="https://…" />
           </mat-form-field>
+
+          <div class="sdetail__file-upload">
+            <span class="text-muted" style="font-size:.82rem">Or upload a file (PDF, PPTX, XLSX…)</span>
+            <label class="sdetail__file-label">
+              <mat-icon>upload_file</mat-icon>
+              {{ selectedFile() ? selectedFile()!.name : 'Choose file' }}
+              <input type="file" accept=".pdf,.pptx,.ppt,.xlsx,.xls,.doc,.docx,.zip" (change)="onFileSelected($event)" hidden />
+            </label>
+            @if (selectedFile()) {
+              <button mat-icon-button type="button" (click)="selectedFile.set(null)" matTooltip="Remove file">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </div>
+
           <button mat-raised-button color="primary" type="submit" [disabled]="submittingMaterial()">
             Submit for review
           </button>
@@ -107,6 +122,11 @@
             @if (m.link) {
               <a [href]="m.link" target="_blank" mat-stroked-button>
                 <mat-icon>open_in_new</mat-icon> Open
+              </a>
+            }
+            @if (m.file) {
+              <a [href]="m.file" target="_blank" mat-stroked-button>
+                <mat-icon>download</mat-icon> Download
               </a>
             }
           </div>

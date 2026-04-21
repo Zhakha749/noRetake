@@ -1,4 +1,4 @@
-// ── Angular Material theme ───────────────────────────────────────────────────
+﻿// ── Angular Material theme ───────────────────────────────────────────────────
 @use '@angular/material' as mat;
 
 @include mat.core();
@@ -39,8 +39,8 @@ body:not(.dark-theme) {
   --color-border:       #2a2a2a;
   --color-text:         #ffffff;
   --color-text-muted:   #777777;
-  --color-primary:      #ff90e8;
-  --color-accent:       #ff90e8;
+  --color-primary:      #ff6b00;
+  --color-accent:       #ff6b00;
   --color-success:      #00e676;
   --color-warning:      #ffea00;
   --color-error:        #ff1744;
@@ -129,7 +129,7 @@ a {
 .mat-mdc-flat-button.mat-primary,
 .mat-mdc-raised-button.mat-accent,
 .mat-mdc-flat-button.mat-accent {
-  --mdc-filled-button-container-color: #ff90e8 !important;
+  --mdc-filled-button-container-color: #ff6b00 !important;
   --mdc-filled-button-label-text-color: #000000 !important;
   border: 2px solid var(--color-text) !important;
   border-radius: 4px !important;
@@ -164,8 +164,8 @@ a {
 
 // Toolbar
 .mat-toolbar {
-  background: #000000 !important;
-  color: #ffffff !important;
+  background: var(--color-bg) !important;
+  color: var(--color-text) !important;
 }
 
 // Form fields (outlined)
@@ -173,12 +173,12 @@ a {
   width: 100%;
   --mdc-outlined-text-field-outline-color:         var(--color-border);
   --mdc-outlined-text-field-hover-outline-color:   var(--color-text);
-  --mdc-outlined-text-field-focus-outline-color:   #ff90e8;
+  --mdc-outlined-text-field-focus-outline-color:   #ff6b00;
   --mdc-outlined-text-field-input-text-color:      var(--color-text);
   --mdc-outlined-text-field-label-text-color:      var(--color-text-muted);
-  --mdc-outlined-text-field-focus-label-text-color: #ff90e8;
+  --mdc-outlined-text-field-focus-label-text-color: #ff6b00;
   --mdc-outlined-text-field-container-shape:       4px;
-  --mdc-outlined-text-field-caret-color:           #ff90e8;
+  --mdc-outlined-text-field-caret-color:           #ff6b00;
   --mat-form-field-container-text-color:           var(--color-text);
   --mat-select-trigger-text-color:                 var(--color-text);
   --mat-select-placeholder-text-color:             var(--color-text-muted);
@@ -189,21 +189,21 @@ a {
 
 // Select panel dropdown
 .mat-mdc-select-panel {
-  background: #111111 !important;
-  border: 2px solid #333 !important;
+  background: var(--color-surface) !important;
+  border: 2px solid var(--color-border) !important;
   border-radius: 4px !important;
 }
 .mat-mdc-option {
-  color: #ffffff !important;
-  &.mdc-list-item--selected { background: #1a1a1a !important; }
-  &:hover:not(.mdc-list-item--disabled) { background: #222222 !important; }
+  color: var(--color-text) !important;
+  &.mdc-list-item--selected { background: var(--color-surface-2) !important; }
+  &:hover:not(.mdc-list-item--disabled) { background: var(--color-surface-2) !important; }
 }
 
 // Checkboxes
 .mat-mdc-checkbox {
-  --mdc-checkbox-selected-icon-color:        #ff90e8;
-  --mdc-checkbox-selected-hover-icon-color:  #ff90e8;
-  --mdc-checkbox-selected-focus-icon-color:  #ff90e8;
+  --mdc-checkbox-selected-icon-color:        #ff6b00;
+  --mdc-checkbox-selected-hover-icon-color:  #ff6b00;
+  --mdc-checkbox-selected-focus-icon-color:  #ff6b00;
   --mdc-checkbox-selected-checkmark-color:   #000;
   --mdc-checkbox-unselected-icon-color:      #555;
   --mdc-checkbox-unselected-hover-icon-color: #fff;
@@ -223,38 +223,38 @@ a {
 
 // Menu panel
 .mat-mdc-menu-panel {
-  background: #111111 !important;
-  border: 2px solid #333333 !important;
+  background: var(--color-surface) !important;
+  border: 2px solid var(--color-border) !important;
   border-radius: 4px !important;
-  box-shadow: 4px 4px 0 #333 !important;
+  box-shadow: 4px 4px 0 var(--color-border) !important;
 }
 .mat-mdc-menu-item {
-  color: #ffffff !important;
-  &:hover { background: #222222 !important; }
-  mat-icon { color: #888 !important; }
+  color: var(--color-text) !important;
+  &:hover { background: var(--color-surface-2) !important; }
+  mat-icon { color: var(--color-text-muted) !important; }
 }
 
 // Divider
-.mat-divider { border-top-color: #2a2a2a !important; }
+.mat-divider { border-top-color: var(--color-border) !important; }
 
 // Autocomplete panel
 .mat-mdc-autocomplete-panel {
-  background: #111111 !important;
-  border: 2px solid #333 !important;
+  background: var(--color-surface) !important;
+  border: 2px solid var(--color-border) !important;
   border-radius: 0 0 4px 4px !important;
 }
 
 // Tooltip
 .mat-mdc-tooltip .mdc-tooltip__surface {
-  background: #1a1a1a !important;
-  border: 1px solid #333 !important;
-  color: #fff !important;
+  background: var(--color-surface-2) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text) !important;
   border-radius: 4px !important;
 }
 
 // Progress spinner → pink
 .mat-mdc-progress-spinner {
-  --mdc-circular-progress-active-indicator-color: #ff90e8 !important;
+  --mdc-circular-progress-active-indicator-color: #ff6b00 !important;
 }
 
 // Snackbar error

@@ -1,4 +1,4 @@
-// ── Entrance animations ───────────────────────────────────────────────────────
+﻿// ── Entrance animations ───────────────────────────────────────────────────────
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -19,10 +19,10 @@
     font-weight: 800;
     letter-spacing: .22em;
     text-transform: uppercase;
-    color: #ff90e8;
+    color: #ff6b00;
     margin-bottom: 28px;
     padding: 6px 18px;
-    border: 2px solid #ff90e8;
+    border: 2px solid #ff6b00;
     border-radius: 4px;
   }
 
@@ -36,7 +36,7 @@
     text-transform: uppercase;
   }
 
-  &__accent { color: #ff90e8; }
+  &__accent { color: #ff6b00; }
 
   &__sub {
     font-size: 1.1rem;
@@ -85,7 +85,7 @@
       font-size: 3.2rem;
       font-weight: 800;
       line-height: 1;
-      color: #ff90e8;
+      color: #ff6b00;
     }
 
     &-label {
@@ -136,7 +136,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: .22em;
-    color: #ff90e8;
+    color: #ff6b00;
     margin: 0;
   }
 
@@ -354,7 +354,7 @@
     width: 56px;
     height: 56px;
     border-radius: 4px;
-    background: #ff90e8;
+    background: #ff6b00;
     display: flex;
     align-items: center;
     justify-content: center;
