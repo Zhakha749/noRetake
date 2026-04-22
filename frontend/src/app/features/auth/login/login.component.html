@@ -1,0 +1,49 @@
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-card__header">
+      <h1 class="auth-card__title">Welcome back</h1>
+      <p class="text-muted">Log in to your KBTU account</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-card__form" novalidate>
+
+      <mat-form-field appearance="outline">
+        <mat-label>University email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="you@kbtu.kz" autocomplete="email" />
+        <mat-icon matPrefix>email</mat-icon>
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <mat-error>Enter a valid email address</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'"
+               formControlName="password" autocomplete="current-password" />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="w-full auth-card__submit" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20" />
+        } @else {
+          Log in
+        }
+      </button>
+    </form>
+
+    <p class="auth-card__footer text-muted">
+      Don't have an account?
+      <a routerLink="/register">Sign up</a>
+    </p>
+  </div>
+</div>

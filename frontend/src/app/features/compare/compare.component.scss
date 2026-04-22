@@ -1,0 +1,107 @@
+.cmp {
+  padding-top: 24px;
+  padding-bottom: 48px;
+
+  &__nav { margin-bottom: 8px; }
+
+  &__heading {
+    font-size: 1.6rem; font-weight: 800; margin: 0 0 24px;
+  }
+
+  &__spinner {
+    display: flex; justify-content: center; padding: 60px 0;
+  }
+
+  &__error {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 12px; padding: 60px 0; color: var(--color-text-muted);
+    mat-icon { font-size: 48px; height: 48px; width: 48px; }
+  }
+
+  // ── Grid layout for side-by-side ──────────────────────────────────────────
+  &__grid {
+    display: grid;
+    grid-template-columns: 160px repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: start;
+  }
+
+  &__label-col { display: flex; align-items: center; }
+
+  &__label {
+    font-weight: 600; font-size: .88rem;
+    color: var(--color-text-muted);
+  }
+
+  &__course-col {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  // ── Header card ───────────────────────────────────────────────────────────
+  &__header-card {
+    padding: 20px; align-items: flex-start; gap: 10px;
+  }
+
+  &__teacher-photo {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--color-surface-2); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    img { width: 100%; height: 100%; object-fit: cover; }
+    mat-icon { font-size: 28px; color: var(--color-text-muted); }
+  }
+
+  &__course-title { font-size: 1.1rem; font-weight: 800; margin: 0; }
+
+  &__teacher-link { font-weight: 500; color: var(--color-primary); font-size: .9rem; }
+
+  &__meta { display: flex; gap: 8px; align-items: center; font-size: .8rem; flex-wrap: wrap; }
+
+  // ── Stat rows ─────────────────────────────────────────────────────────────
+  &__stat-row {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  &__policy { font-size: .82rem; line-height: 1.5; }
+
+  // ── Badges ────────────────────────────────────────────────────────────────
+  &__badge {
+    font-size: .72rem; padding: 2px 9px; border-radius: 12px; font-weight: 600;
+    text-transform: capitalize;
+    &--lecturer { background: #e8eaf6; color: #3949ab; }
+    &--practice { background: #e0f2f1; color: #00796b; }
+    &--labs     { background: #fff3e0; color: #e65100; }
+    &--all      { background: #f3e5f5; color: #6a1b9a; }
+  }
+
+  // ── Radar ─────────────────────────────────────────────────────────────────
+  &__section-title {
+    font-size: 1rem; font-weight: 700;
+    margin: 20px 0 12px;
+  }
+
+  &__radar-wrap {
+    padding: 20px;
+    display: flex; justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  // ── Grade charts ──────────────────────────────────────────────────────────
+  &__chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__chart-card {
+    padding: 16px;
+  }
+
+  &__chart-label {
+    font-size: .9rem; font-weight: 700; margin: 0 0 10px;
+  }
+
+  &__divider { margin: 20px 0 !important; }
+}

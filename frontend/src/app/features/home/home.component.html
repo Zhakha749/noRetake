@@ -1,0 +1,119 @@
+<!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero__inner page-container">
+    <span class="hero__eyebrow">KBTU Academic Transparency Platform</span>
+    <h1 class="hero__title">
+      Rate your<br>
+      <span class="hero__accent">KBTU</span><br>
+      professors
+    </h1>
+    <p class="hero__sub">Transparent ratings, real reviews, and grade data from students who've been there.</p>
+
+    <div class="hero__search">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="hero__search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search teachers or subjects…"
+               [formControl]="searchCtrl" (keyup.enter)="search()" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="hero__search-btn" (click)="search()">
+        Search
+      </button>
+    </div>
+
+    <!-- Stats counter -->
+    <div class="hero__stats">
+      <div class="hero__stat">
+        <span class="hero__stat-value">{{ stats().teachers }}</span>
+        <span class="hero__stat-label">Teachers Rated</span>
+      </div>
+      <div class="hero__stat-divider"></div>
+      <div class="hero__stat">
+        <span class="hero__stat-value">{{ stats().subjects }}</span>
+        <span class="hero__stat-label">Subjects Covered</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Top Teachers ──────────────────────────────────────────────────────── -->
+<section class="section page-container">
+  <div class="section__header">
+    <div class="section__heading">
+      <p class="section__overline">Student-reviewed</p>
+      <h2 class="section__title">Top Teachers</h2>
+    </div>
+    <a mat-button routerLink="/teachers">View all <mat-icon>chevron_right</mat-icon></a>
+  </div>
+  <div class="teacher-grid">
+    @for (teacher of topTeachers(); track teacher.id; let i = $index) {
+      <a class="teacher-card card" [routerLink]="['/teachers', teacher.id]"
+         [style.animation-delay]="(i * 60) + 'ms'">
+        <div class="teacher-card__avatar">
+          <img [src]="teacher.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="teacher.full_name" />
+        </div>
+        <div class="teacher-card__info">
+          <h3 class="teacher-card__name">{{ teacher.full_name }}</h3>
+          <span class="text-muted teacher-card__age">{{ teacher.age_range }} yrs</span>
+        </div>
+        <div class="teacher-card__rating"
+             [class]="'teacher-card__rating ' + getRatingClass(teacher.average_ratings.overall)">
+          {{ teacher.average_ratings.overall | number:'1.1-1' }}
+          <mat-icon>star</mat-icon>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+
+<!-- ── Trending Subjects ─────────────────────────────────────────────────── -->
+<section class="section page-container">
+  <div class="section__header">
+    <div class="section__heading">
+      <p class="section__overline">Course catalogue</p>
+      <h2 class="section__title">Trending Subjects</h2>
+    </div>
+    <a mat-button routerLink="/subjects">View all <mat-icon>chevron_right</mat-icon></a>
+  </div>
+  <div class="subject-grid">
+    @for (subject of subjects(); track subject.id; let i = $index) {
+      <a class="subject-card card subject-card--{{ subject.category }}"
+         [routerLink]="['/subjects', subject.id]"
+         [style.animation-delay]="(i * 50) + 'ms'">
+        <div class="subject-card__top">
+          <span class="subject-card__title">{{ subject.title }}</span>
+          <span class="subject-card__badge badge badge--{{ subject.category }}">{{ subject.category }}</span>
+        </div>
+        <div class="subject-card__credits text-muted">{{ subject.credits }} credits</div>
+        <div class="subject-card__difficulty">
+          <span class="text-muted">Difficulty</span>
+          <div class="difficulty-bar">
+            <div class="difficulty-bar__fill" [style.width]="getDifficultyWidth(subject.overall_difficulty)"></div>
+          </div>
+          <span class="subject-card__diff-val">{{ subject.overall_difficulty | number:'1.1-1' }}/10</span>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+
+<!-- ── How it works ──────────────────────────────────────────────────────── -->
+<section class="how-it-works">
+  <div class="page-container">
+    <div class="section__heading section__heading--center">
+      <p class="section__overline">Get started</p>
+      <h2 class="section__title text-center">How it works</h2>
+    </div>
+    <div class="steps">
+      @for (step of [{icon:'search',n:'1',title:'Search',desc:'Find teachers and subjects by name, category, or department.'},
+                     {icon:'compare_arrows',n:'2',title:'Compare',desc:'Compare two teachers side-by-side on grades, difficulty, and ratings.'},
+                     {icon:'school',n:'3',title:'Choose',desc:'Make an informed course selection backed by real student data.'}]; track step.n) {
+        <div class="step">
+          <span class="step__bg-num">0{{ step.n }}</span>
+          <div class="step__icon"><mat-icon>{{ step.icon }}</mat-icon></div>
+          <h3 class="step__title">{{ step.title }}</h3>
+          <p class="step__desc text-muted">{{ step.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,161 @@
+@if (loading()) {
+  <app-loading-spinner minHeight="400px" />
+} @else {
+  @if (teacher(); as t) {
+<div class="profile">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <header class="profile__header">
+    <div class="page-container profile__header-inner">
+      <div class="profile__photo-wrap">
+        <img class="profile__photo" [src]="t.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="t.full_name" />
+      </div>
+
+      <div class="profile__hero-info">
+        <div class="profile__name-row">
+          <h1 class="profile__name">{{ t.full_name }}</h1>
+          @if (t.is_verified) {
+            <span class="profile__verified" matTooltip="Verified KBTU teacher">
+              <mat-icon>verified</mat-icon>
+            </span>
+          }
+        </div>
+        <div class="profile__meta text-muted">
+          <span>{{ t.age_range }} yrs</span>
+          <span>·</span>
+          <span>{{ t.review_count }} reviews</span>
+        </div>
+        <app-rating-badge [value]="t.average_ratings.overall" />
+      </div>
+
+      <div class="profile__actions">
+        <a mat-stroked-button routerLink="/teachers">
+          <mat-icon>arrow_back</mat-icon> All teachers
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-container profile__body">
+
+    <!-- ── Left column ──────────────────────────────────────────────────── -->
+    <div class="profile__col-left">
+
+      <!-- Admin description -->
+      <section class="profile__section card">
+        <h2 class="profile__section-title">About</h2>
+        <blockquote class="profile__desc">{{ t.description }}</blockquote>
+      </section>
+
+      <!-- Radar chart -->
+      <section class="profile__section card">
+        <h2 class="profile__section-title">Rating breakdown</h2>
+        @if (t.average_ratings.overall > 0) {
+          <app-radar-chart [ratings]="t.average_ratings" size="280px" primaryLabel="Ratings" />
+          <div class="profile__rating-row">
+            @for (item of [
+              {label:'Overall',       v: t.average_ratings.overall},
+              {label:'Clarity',       v: t.average_ratings.clarity},
+              {label:'Objectivity',   v: t.average_ratings.objectivity},
+              {label:'Accessibility', v: t.average_ratings.accessibility},
+              {label:'Workload',      v: t.average_ratings.workload}
+            ]; track item.label) {
+              <div class="profile__stat">
+                <span class="profile__stat-val">{{ item.v | number:'1.1-1' }}</span>
+                <span class="profile__stat-lbl text-muted">{{ item.label }}</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-muted">No ratings yet.</p>
+        }
+      </section>
+
+      <!-- Sensitive markers (conditional) -->
+      @if (showBiasSection()) {
+        <section class="profile__section card profile__bias-section">
+          <button mat-button class="profile__bias-toggle"
+                  (click)="showBiasSection.set(!showBiasSection())">
+            <mat-icon>warning_amber</mat-icon>
+            Other markers (student-reported)
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <p class="text-muted profile__bias-note">
+            Gender bias score: <strong>{{ t.gender_bias_score | number:'1.1-1' }}/5</strong>.
+            This is based on student reports and should be interpreted with caution.
+          </p>
+        </section>
+      }
+    </div>
+
+    <!-- ── Right column ─────────────────────────────────────────────────── -->
+    <div class="profile__col-right">
+
+      <!-- Teaching history timeline -->
+      <section class="profile__section card">
+        <h2 class="profile__section-title">Teaching history</h2>
+        @if (timelineGroups().length === 0) {
+          <p class="text-muted">No teaching history recorded.</p>
+        } @else {
+          <div class="timeline">
+            @for (group of timelineGroups(); track group.year) {
+              <div class="timeline__group">
+                <div class="timeline__year-marker">
+                  <span class="timeline__year-label">{{ group.year }}</span>
+                  <div class="timeline__year-line"></div>
+                </div>
+                <div class="timeline__items">
+                  @for (item of group.items; track item.course_instance_id) {
+                    <a class="timeline__item"
+                       [routerLink]="['/course', item.course_instance_id]"
+                       [style.border-left-color]="getRoleColor(item.role)">
+                      <span class="timeline__subject">{{ item.subject_name }}</span>
+                      <span class="timeline__role" [style.color]="getRoleColor(item.role)">
+                        {{ item.role }}
+                      </span>
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Reviews -->
+      <section class="profile__section">
+        <h2 class="profile__section-title">Student reviews</h2>
+        @if (!t.teaching_history || t.teaching_history.length === 0) {
+          <p class="text-muted">No courses recorded yet.</p>
+        }
+        <!-- Reviews are shown per CourseInstance — link users to course detail -->
+        <p class="text-muted profile__reviews-hint">
+          <mat-icon>info</mat-icon>
+          Reviews are written per course. View a specific course below to read or write reviews.
+        </p>
+        <div class="profile__course-links">
+          @for (group of timelineGroups(); track group.year) {
+            @for (item of group.items; track item.course_instance_id) {
+              <a class="profile__course-link card"
+                 [routerLink]="['/course', item.course_instance_id]">
+                <div>
+                  <span class="profile__course-name">{{ item.subject_name }}</span>
+                  <span class="text-muted"> · {{ item.year_interval }} · {{ item.role }}</span>
+                </div>
+                <mat-icon>chevron_right</mat-icon>
+              </a>
+            }
+          }
+        </div>
+      </section>
+    </div>
+
+  </div><!-- /body -->
+</div>
+  } @else {
+    <div class="page-container" style="padding-top:40px">
+      <p class="text-muted">Teacher not found.</p>
+      <a mat-stroked-button routerLink="/teachers">Back to teachers</a>
+    </div>
+  }
+}

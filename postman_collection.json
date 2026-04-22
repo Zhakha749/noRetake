@@ -1,0 +1,368 @@
+{
+  "info": {
+    "name": "KBTU Academic Transparency Platform",
+    "description": "Full API collection for the KBTU Academic Transparency Platform. Base URL: http://localhost:8000/api/v1/\n\nAuthentication: set the 'access' variable after calling Login, then all authenticated requests use Bearer {{access}} automatically via the collection-level auth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{access}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api/v1", "type": "string" },
+    { "key": "access",   "value": "", "type": "string" },
+    { "key": "refresh",  "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/register/", "host": ["{{base_url}}"], "path": ["auth", "register", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"bagdat_test\",\n  \"university_email\": \"bagdat.test@kbtu.kz\",\n  \"password\": \"StrongPass123!\",\n  \"password2\": \"StrongPass123!\"\n}"
+            },
+            "description": "Register a new student. university_email must end in @kbtu.kz."
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access)  pm.collectionVariables.set('access',  json.access);",
+                  "if (json.refresh) pm.collectionVariables.set('refresh', json.refresh);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/login/", "host": ["{{base_url}}"], "path": ["auth", "login", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"university_email\": \"bagdat.test@kbtu.kz\",\n  \"password\": \"StrongPass123!\"\n}"
+            },
+            "description": "Returns JWT access + refresh tokens. The test script auto-saves them to collection variables."
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access) pm.collectionVariables.set('access', json.access);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/refresh/", "host": ["{{base_url}}"], "path": ["auth", "refresh", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh}}\"\n}"
+            },
+            "description": "Exchange a refresh token for a new access token."
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/auth/profile/", "host": ["{{base_url}}"], "path": ["auth", "profile", ""] },
+            "description": "Returns the authenticated student's profile (id, username, university_email, karma, is_staff)."
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/profile/", "host": ["{{base_url}}"], "path": ["auth", "profile", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_username\"\n}"
+            },
+            "description": "Partially update the authenticated student's profile."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Teachers",
+      "item": [
+        {
+          "name": "List Teachers",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/teachers/",
+              "host": ["{{base_url}}"],
+              "path": ["teachers", ""],
+              "query": [
+                { "key": "search",    "value": "",       "description": "Filter by full_name (icontains)", "disabled": true },
+                { "key": "name",      "value": "",       "description": "Filter by full_name (icontains)", "disabled": true },
+                { "key": "age_range", "value": "30-40",  "description": "One of: 20-30, 30-40, 40-50, 50-60, 60+", "disabled": true },
+                { "key": "subject",   "value": "1",      "description": "Filter by subject ID", "disabled": true },
+                { "key": "is_verified", "value": "true", "description": "true or false", "disabled": true },
+                { "key": "ordering",  "value": "full_name", "description": "full_name or -full_name", "disabled": true },
+                { "key": "page",      "value": "1",      "description": "Page number (page size: 20)", "disabled": true }
+              ]
+            },
+            "description": "Public. Returns paginated list of teachers. Supports filtering, searching, and ordering."
+          }
+        },
+        {
+          "name": "Get Teacher",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/teachers/1/", "host": ["{{base_url}}"], "path": ["teachers", "1", ""] },
+            "description": "Public. Full teacher profile including average ratings, teaching history, and gender_bias_score (only shown if > 3.0 and confirmed by 10+ reviewers)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "List Subjects",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["subjects", ""],
+              "query": [
+                { "key": "search",   "value": "",            "description": "Search by title", "disabled": true },
+                { "key": "category", "value": "mandatory",   "description": "mandatory | elective | major | minor | profile", "disabled": true },
+                { "key": "ordering", "value": "title",       "description": "title, -title, credits, -credits", "disabled": true },
+                { "key": "page",     "value": "1",           "disabled": true }
+              ]
+            },
+            "description": "Public. Returns paginated list of subjects with overall_difficulty and teacher_dependency_ratio."
+          }
+        },
+        {
+          "name": "Get Subject",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/subjects/1/", "host": ["{{base_url}}"], "path": ["subjects", "1", ""] },
+            "description": "Public. Full subject detail: description, difficulty stats, per-teacher breakdown, and approved materials."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Course Instances",
+      "item": [
+        {
+          "name": "Get Course Instance",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/course-instances/1/", "host": ["{{base_url}}"], "path": ["course-instances", "1", ""] },
+            "description": "Public. Full course instance detail: teacher, subject, grading policy, weekly plan, grade distribution, syllabus history, and reviews."
+          }
+        },
+        {
+          "name": "Compare Course Instances",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/course-instances/compare/?ids=1,2",
+              "host": ["{{base_url}}"],
+              "path": ["course-instances", "compare", ""],
+              "query": [
+                { "key": "ids", "value": "1,2", "description": "Comma-separated list of at least 2 course instance IDs" }
+              ]
+            },
+            "description": "Public. Side-by-side comparison data for 2+ course instances (same subject, different teachers)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/reviews/", "host": ["{{base_url}}"], "path": ["reviews", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_instance\": 1,\n  \"text\": \"Great teacher, explains concepts clearly.\",\n  \"rating\": 8,\n  \"difficulty_rating\": 6,\n  \"clarity_rating\": 9,\n  \"objectivity_rating\": 8,\n  \"accessibility_rating\": 7,\n  \"workload_rating\": 6,\n  \"is_anonymous\": true,\n  \"took_this_course\": true,\n  \"sensitive_markers\": {\n    \"gender_bias\": false,\n    \"favoritism\": false\n  }\n}"
+            },
+            "description": "Auth required. All rating fields accept 1–10. is_anonymous hides the author name in responses."
+          }
+        },
+        {
+          "name": "Report Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/reviews/1/report/", "host": ["{{base_url}}"], "path": ["reviews", "1", "report", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"This review contains offensive language.\"\n}"
+            },
+            "description": "Auth required. A review is auto-hidden when it accumulates 5+ open reports."
+          }
+        },
+        {
+          "name": "Vote on Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/reviews/1/vote/", "host": ["{{base_url}}"], "path": ["reviews", "1", "vote", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vote\": \"up\"\n}"
+            },
+            "description": "Auth required. vote must be 'up' or 'down'. Returns updated helpful_votes count."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Materials",
+      "item": [
+        {
+          "name": "List Approved Materials",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/materials/",
+              "host": ["{{base_url}}"],
+              "path": ["materials", ""],
+              "query": [
+                { "key": "subject", "value": "1", "description": "Filter by subject ID", "disabled": true }
+              ]
+            },
+            "description": "Public. Returns only approved materials. Filter by subject_id."
+          }
+        },
+        {
+          "name": "Submit Material",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/materials/", "host": ["{{base_url}}"], "path": ["materials", ""] },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "title",   "value": "Algorithms Lecture Notes Week 1-6", "type": "text" },
+                { "key": "type",    "value": "lecture", "type": "text", "description": "lecture | exam | book | other" },
+                { "key": "subject", "value": "1",       "type": "text" },
+                { "key": "link",    "value": "https://drive.google.com/...", "type": "text", "description": "URL (optional if uploading file)" },
+                { "key": "file",    "type": "file",  "description": "File upload (optional if link provided, max 50MB)", "disabled": true }
+              ]
+            },
+            "description": "Auth required. Submitted materials start as 'pending' and must be approved by an admin. Contributor karma +5 on approval."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get Platform Stats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/admin/stats/", "host": ["{{base_url}}"], "path": ["admin", "stats", ""] },
+            "description": "Admin only. Returns total counts, new_reviews_today, pending_materials, open_reports, and daily review counts for the last 7 days."
+          }
+        },
+        {
+          "name": "List Pending Materials",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/admin/moderation/materials/", "host": ["{{base_url}}"], "path": ["admin", "moderation", "materials", ""] },
+            "description": "Admin only. Returns all materials with status='pending', ordered by newest first."
+          }
+        },
+        {
+          "name": "Approve or Reject Material",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/admin/moderation/materials/1/", "host": ["{{base_url}}"], "path": ["admin", "moderation", "materials", "1", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"approve\"\n}"
+            },
+            "description": "Admin only. action must be 'approve' or 'reject'. Approving a material grants the contributor +5 karma."
+          }
+        },
+        {
+          "name": "List Open Reports",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/admin/moderation/reports/", "host": ["{{base_url}}"], "path": ["admin", "moderation", "reports", ""] },
+            "description": "Admin only. Returns all open review reports ordered by newest first."
+          }
+        },
+        {
+          "name": "Action on Report",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/admin/moderation/reports/1/", "host": ["{{base_url}}"], "path": ["admin", "moderation", "reports", "1", ""] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"hide_review\"\n}"
+            },
+            "description": "Admin only. action must be one of:\n- 'hide_review' — marks review as hidden and resolves the report\n- 'dismiss' — resolves the report without hiding the review\n- 'ban_user' — deactivates the review author's account and resolves the report"
+          }
+        },
+        {
+          "name": "Mass Assign Syllabus",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/admin/mass-assign-syllabus/", "host": ["{{base_url}}"], "path": ["admin", "mass-assign-syllabus", ""] },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "subject_id",   "value": "1",    "type": "text" },
+                { "key": "teacher_ids",  "value": "1",    "type": "text", "description": "Repeat this key for each teacher ID" },
+                { "key": "teacher_ids",  "value": "2",    "type": "text" },
+                { "key": "year",         "value": "2024", "type": "text" },
+                { "key": "file",         "type": "file",  "description": "PDF syllabus file (max 10MB)" }
+              ]
+            },
+            "description": "Admin only. Uploads a single syllabus PDF and links it to all CourseInstances matching the given subject + teacher IDs. Returns the count of updated instances."
+          }
+        }
+      ]
+    }
+  ]
+}

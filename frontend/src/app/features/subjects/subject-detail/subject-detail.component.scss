@@ -1,0 +1,94 @@
+.sdetail {
+  &__header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 28px 0;
+  }
+  &__header-inner { display: flex; align-items: center; justify-content: space-between; }
+  &__breadcrumb { font-size: .82rem; margin-bottom: 6px; a { color: var(--color-primary); } }
+  &__title { font-size: 1.7rem; font-weight: 800; margin: 0 0 8px; }
+  &__meta { display: flex; align-items: center; gap: 10px; }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 24px;
+    padding-top: 28px; padding-bottom: 40px;
+  }
+
+  &__col-left, &__col-right { display: flex; flex-direction: column; gap: 20px; }
+
+  &__section { padding: 20px; }
+  &__section-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 14px; }
+
+  // Difficulty rows
+  &__diff-row {
+    display: flex; align-items: center; gap: 12px;
+    font-size: .88rem; margin-bottom: 12px;
+    span:first-child { width: 140px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
+  }
+  &__diff-bar { flex: 1; }
+  &__info-icon { font-size: 14px; height: 14px; width: 14px; color: var(--color-text-muted); }
+
+  &__dep-label {
+    font-weight: 600;
+    &.dep-high { color: #e53935; }
+    &.dep-mid  { color: #fb8c00; }
+    &.dep-low  { color: #43a047; }
+  }
+
+  // Materials
+  &__mat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+
+  &__mat-form {
+    display: flex; flex-direction: column; gap: 8px;
+    border: 1px dashed var(--color-border); border-radius: var(--radius-sm);
+    padding: 16px; margin-bottom: 16px;
+  }
+
+  &__mat-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+
+  &__mat-item {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 10px 14px; background: var(--color-surface-2);
+    border-radius: var(--radius-sm);
+    div:first-child { display: flex; align-items: center; gap: 8px; }
+  }
+
+  &__mat-title { font-weight: 500; font-size: .9rem; }
+  &__mat-type { font-size: .68rem; }
+  &__mat-meta { font-size: .78rem; }
+
+  &__file-upload {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+
+  &__file-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: .82rem; font-weight: 600; cursor: pointer;
+    color: var(--color-text);
+    transition: border-color var(--transition);
+    &:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    mat-icon { font-size: 16px; height: 16px; width: 16px; }
+  }
+
+  // Teacher table
+  &__table { width: 100%; }
+}
+
+.badge {
+  font-size: .7rem; padding: 2px 8px; border-radius: 20px; font-weight: 600;
+  white-space: nowrap; text-transform: capitalize;
+  &--mandatory { background:#e3f2fd; color:#1565c0; }
+  &--elective  { background:#f3e5f5; color:#6a1b9a; }
+  &--major     { background:#e8f5e9; color:#2e7d32; }
+  &--minor     { background:#fff3e0; color:#e65100; }
+  &--profile   { background:#fce4ec; color:#880e4f; }
+}
+
+@media (max-width: 900px) {
+  .sdetail__body { grid-template-columns: 1fr; }
+}

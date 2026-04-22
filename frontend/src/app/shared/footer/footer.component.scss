@@ -1,0 +1,52 @@
+﻿.footer {
+  background: var(--color-bg);
+  border-top: 2px solid var(--color-border);
+  margin-top: auto;
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 28px;
+    padding-bottom: 28px;
+  }
+
+  &__brand { display: flex; flex-direction: column; gap: 6px; }
+
+  &__logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--color-text);
+  }
+
+  &__links {
+    display: flex;
+    gap: 24px;
+
+    a {
+      color: var(--color-text-muted);
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      text-decoration: none;
+      transition: color 120ms ease;
+
+      &:hover { color: #ff6b00; text-decoration: none; }
+    }
+  }
+
+  &__copy {
+    font-size: .72rem;
+    width: 100%;
+    text-align: center;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+}

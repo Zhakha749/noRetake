@@ -1,0 +1,389 @@
+﻿// ── Entrance animations ───────────────────────────────────────────────────────
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.hero {
+  background: #000000;
+  color: #ffffff;
+  padding: 96px 0 80px;
+  border-bottom: 2px solid #222;
+
+  &__inner { text-align: center; }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #ff6b00;
+    margin-bottom: 28px;
+    padding: 6px 18px;
+    border: 2px solid #ff6b00;
+    border-radius: 4px;
+  }
+
+  &__title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.8rem, 11vw, 7.5rem);
+    font-weight: 800;
+    line-height: .92;
+    margin: 0 0 28px;
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+  }
+
+  &__accent { color: #ff6b00; }
+
+  &__sub {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: #777;
+    margin: 0 auto 52px;
+    max-width: 500px;
+  }
+
+  &__search {
+    display: flex;
+    gap: 12px;
+    max-width: 620px;
+    margin: 0 auto 60px;
+
+    &-field { flex: 1; }
+
+    &-btn {
+      height: 56px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 56px;
+  }
+
+  &__stat-divider {
+    width: 2px;
+    height: 56px;
+    background: #222;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    &-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #ff6b00;
+    }
+
+    &-label {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: #555;
+    }
+  }
+}
+
+// ── Sections ─────────────────────────────────────────────────────────────────
+.section {
+  margin-top: 72px;
+
+  &__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-border);
+
+    a {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      color: var(--color-text);
+      text-transform: uppercase;
+      font-size: .82rem;
+      letter-spacing: .1em;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    &--center {
+      align-items: center;
+      margin-bottom: 48px;
+    }
+  }
+
+  &__overline {
+    font-size: .68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    color: #ff6b00;
+    margin: 0;
+  }
+
+  &__title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -.02em;
+    color: var(--color-text);
+
+    &.text-center { text-align: center; }
+  }
+}
+
+// ── Teacher grid ──────────────────────────────────────────────────────────────
+.teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.teacher-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 22px;
+  text-decoration: none;
+  color: var(--color-text);
+  gap: 12px;
+  animation: slideUp .45s ease both;
+
+  &:hover { text-decoration: none; }
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-surface-2);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-border);
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+    &-icon { font-size: 42px; color: var(--color-text-muted); }
+  }
+
+  &__info { text-align: center; }
+
+  &__name {
+    font-size: .95rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+
+  &__age { font-size: .78rem; }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    font-family: 'Syne', sans-serif;
+    padding: 4px 14px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+
+    mat-icon { font-size: 15px; height: 15px; width: 15px; }
+  }
+}
+
+// ── Subject grid ──────────────────────────────────────────────────────────────
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.subject-card {
+  padding: 20px 22px;
+  text-decoration: none;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: slideUp .45s ease both;
+  border-left: 3px solid transparent;
+
+  &:hover { text-decoration: none; }
+
+  &--mandatory { border-left-color: #82b4ff; }
+  &--elective  { border-left-color: #e0a3ff; }
+  &--major     { border-left-color: #7dff9a; }
+  &--minor     { border-left-color: #ffc97d; }
+  &--profile   { border-left-color: #ff9ab5; }
+
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: .95rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+  }
+
+  &__credits { font-size: .78rem; }
+
+  &__difficulty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .78rem;
+  }
+
+  &__diff-val {
+    font-weight: 700;
+    font-size: .78rem;
+    white-space: nowrap;
+    color: var(--color-text-muted);
+  }
+}
+
+// Category badges — bordered, no fill
+.badge {
+  font-size: .62rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  flex-shrink: 0;
+
+  &--mandatory { color: #82b4ff; }
+  &--elective  { color: #e0a3ff; }
+  &--major     { color: #7dff9a; }
+  &--minor     { color: #ffc97d; }
+  &--profile   { color: #ff9ab5; }
+}
+
+// Difficulty bar
+.difficulty-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+
+  &__fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00e676, #ffea00, #ff1744);
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+}
+
+// ── How it works ──────────────────────────────────────────────────────────────
+.how-it-works {
+  background: #000;
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+  padding: 80px 0 88px;
+  margin-top: 72px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+
+.step {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+
+  &__bg-num {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 7rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #1a1a1a;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    letter-spacing: -.05em;
+  }
+
+  &__icon {
+    position: relative;
+    z-index: 1;
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    background: #ff6b00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    transition: transform .15s ease;
+
+    mat-icon { color: #000; font-size: 26px; }
+  }
+
+  &:hover &__icon { transform: translate(-2px, -2px); }
+
+  &__title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    color: var(--color-text);
+  }
+
+  &__desc {
+    position: relative;
+    z-index: 1;
+    font-size: .88rem;
+    max-width: 240px;
+    margin: 0;
+    line-height: 1.65;
+  }
+}

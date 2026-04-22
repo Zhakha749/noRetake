@@ -1,0 +1,101 @@
+<div class="tlist page-container">
+
+  <!-- Sidebar -->
+  <aside class="tlist__sidebar card">
+    <h2 class="tlist__sidebar-title">Filters</h2>
+
+    <!-- Search — [(ngModel)] #1 -->
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Search by name</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput
+             [(ngModel)]="searchValue"
+             (ngModelChange)="onFilterChange()"
+             placeholder="e.g. Nabiev" />
+    </mat-form-field>
+
+    <mat-divider />
+
+    <!-- Age range — [(ngModel)] #2–6 (one per checkbox) -->
+    <div class="tlist__filter-group">
+      <h3 class="tlist__filter-label">Age range</h3>
+      @for (range of ageRanges; track range) {
+        <mat-checkbox
+          [(ngModel)]="ageRangeModel[range]"
+          (ngModelChange)="onFilterChange()">
+          {{ range }}
+        </mat-checkbox>
+      }
+    </div>
+
+    <mat-divider />
+
+    <!-- Subject filter — [(ngModel)] #7 -->
+    <div class="tlist__filter-group">
+      <h3 class="tlist__filter-label">Subject</h3>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Any subject</mat-label>
+        <mat-select
+          [(ngModel)]="selectedSubject"
+          (ngModelChange)="onFilterChange()">
+          <mat-option [value]="null">Any subject</mat-option>
+          @for (s of subjects(); track s.id) {
+            <mat-option [value]="s.id">{{ s.title }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-divider />
+
+    <!-- Sort — [(ngModel)] #8 -->
+    <div class="tlist__filter-group">
+      <h3 class="tlist__filter-label">Sort by</h3>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select
+          [(ngModel)]="selectedOrdering"
+          (ngModelChange)="onFilterChange()">
+          @for (opt of sortOptions; track opt.value) {
+            <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-stroked-button class="w-full" (click)="clearFilters()">
+      <mat-icon>clear</mat-icon> Clear filters
+    </button>
+  </aside>
+
+  <!-- Main content -->
+  <div class="tlist__main">
+    <div class="tlist__topbar">
+      <h1 class="tlist__heading">
+        Teachers
+        @if (!loading()) { <span class="text-muted tlist__count">({{ total() }})</span> }
+      </h1>
+    </div>
+
+    @if (loading()) {
+      <app-loading-spinner />
+    } @else if (teachers().length === 0) {
+      <div class="tlist__empty">
+        <mat-icon>search_off</mat-icon>
+        <p>No teachers match your filters.</p>
+        <button mat-stroked-button (click)="clearFilters()">Clear filters</button>
+      </div>
+    } @else {
+      <div class="tlist__grid">
+        @for (t of teachers(); track t.id) {
+          <app-teacher-card [teacher]="t" />
+        }
+      </div>
+      <mat-paginator
+        [length]="total()"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)" />
+    }
+  </div>
+</div>

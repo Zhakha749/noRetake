@@ -1,0 +1,64 @@
+.scard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px;
+  text-decoration: none;
+  color: var(--color-text);
+  border-left: 3px solid transparent;
+
+  &:hover { text-decoration: none; }
+
+  // Category left border accent
+  &.badge--mandatory-border { border-left-color: #82b4ff; }
+  &.badge--elective-border  { border-left-color: #e0a3ff; }
+  &.badge--major-border     { border-left-color: #7dff9a; }
+  &.badge--minor-border     { border-left-color: #ffc97d; }
+  &.badge--profile-border   { border-left-color: #ff9ab5; }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: .92rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.35;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+  }
+
+  &__credits { font-size: .78rem; }
+
+  &__diff {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__diff-label { font-size: .72rem; }
+}
+
+// Category badges — bordered, transparent bg
+.badge {
+  font-size: .62rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  flex-shrink: 0;
+
+  &--mandatory { color: #82b4ff; }
+  &--elective  { color: #e0a3ff; }
+  &--major     { color: #7dff9a; }
+  &--minor     { color: #ffc97d; }
+  &--profile   { color: #ff9ab5; }
+}

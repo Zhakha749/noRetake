@@ -1,0 +1,76 @@
+<div class="rcard card">
+  <!-- Header row -->
+  <div class="rcard__header">
+    <div class="rcard__meta">
+      <span class="rcard__author">
+        <mat-icon class="rcard__avatar-icon">account_circle</mat-icon>
+        {{ review().author_name }}
+      </span>
+      @if (review().took_this_course) {
+        <span class="rcard__badge rcard__badge--verified">
+          <mat-icon>school</mat-icon> Verified student
+        </span>
+      }
+      <span class="text-muted rcard__date">{{ review().created_at | date:'mediumDate' }}</span>
+    </div>
+
+    <div class="rcard__scores">
+      <span class="rcard__score" [class]="getRatingClass(review().rating)">
+        <mat-icon>star</mat-icon> {{ review().rating }}/10
+      </span>
+      <span class="rcard__score text-muted">
+        <mat-icon>fitness_center</mat-icon> Diff {{ review().difficulty_rating }}/10
+      </span>
+    </div>
+  </div>
+
+  <!-- Text -->
+  <p class="rcard__text">{{ review().text }}</p>
+
+  <!-- Sub-ratings -->
+  <div class="rcard__subratings">
+    @for (item of [
+      {label:'Clarity',       v: review().clarity_rating},
+      {label:'Objectivity',   v: review().objectivity_rating},
+      {label:'Accessibility', v: review().accessibility_rating},
+      {label:'Workload',      v: review().workload_rating}
+    ]; track item.label) {
+      <div class="rcard__subrating">
+        <span class="text-muted">{{ item.label }}</span>
+        <div class="rcard__subbar">
+          <div class="rcard__subbar-fill" [style.width]="(item.v / 10 * 100) + '%'"></div>
+        </div>
+        <span>{{ item.v }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- Sensitive markers -->
+  @if (review().sensitive_markers.gender_bias) {
+    <div class="rcard__marker">
+      <mat-icon>warning_amber</mat-icon>
+      <span>Student reported gender bias concerns</span>
+    </div>
+  }
+
+  <!-- Footer: votes + report -->
+  <div class="rcard__footer">
+    <div class="rcard__votes">
+      <span class="text-muted">Helpful?</span>
+      <button mat-icon-button [disabled]="!canVote()" (click)="voteClicked.emit('up')"
+              matTooltip="Mark as helpful">
+        <mat-icon>thumb_up</mat-icon>
+      </button>
+      <span class="rcard__vote-count">{{ review().helpful_votes }}</span>
+      <button mat-icon-button [disabled]="!canVote()" (click)="voteClicked.emit('down')"
+              matTooltip="Not helpful">
+        <mat-icon>thumb_down</mat-icon>
+      </button>
+    </div>
+    @if (canReport()) {
+      <button mat-button color="warn" class="rcard__report" (click)="reportClicked.emit()">
+        <mat-icon>flag</mat-icon> Report
+      </button>
+    }
+  </div>
+</div>

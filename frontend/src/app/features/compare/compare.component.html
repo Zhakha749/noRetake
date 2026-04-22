@@ -1,0 +1,125 @@
+<div class="cmp page-container">
+  <div class="cmp__nav">
+    <a mat-button routerLink="/subjects">
+      <mat-icon>arrow_back</mat-icon> Back to subjects
+    </a>
+  </div>
+
+  <h1 class="cmp__heading">Compare courses</h1>
+
+  @if (loading()) {
+    <div class="cmp__spinner">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (errorMsg()) {
+    <div class="cmp__error">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorMsg() }}</p>
+    </div>
+  } @else if (courses().length < 2) {
+    <div class="cmp__error">
+      <mat-icon>info_outline</mat-icon>
+      <p>
+        Only {{ courses().length }} course(s) found. Add a second ID via the Compare button on a course page
+        (e.g. <strong>?ids=1,2</strong>).
+      </p>
+    </div>
+  } @else {
+
+    <!-- ── Header row ──────────────────────────────────────────────────────── -->
+    <div class="cmp__grid">
+      <div class="cmp__label-col"></div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col card cmp__header-card">
+          <div class="cmp__teacher-photo">
+            <img [src]="c.teacher.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="c.teacher.full_name" />
+          </div>
+          <h2 class="cmp__course-title">{{ c.subject.title }}</h2>
+          <a class="cmp__teacher-link" [routerLink]="['/teachers', c.teacher.id]">
+            {{ c.teacher.full_name }}
+          </a>
+          <div class="cmp__meta text-muted">
+            <span class="cmp__badge cmp__badge--{{ c.role.toLowerCase() }}">{{ c.role }}</span>
+            <span>{{ c.year_interval }}</span>
+          </div>
+          <app-rating-badge [value]="c.average_ratings.overall" />
+        </div>
+      }
+    </div>
+
+    <mat-divider class="cmp__divider" />
+
+    <!-- ── Stat rows ──────────────────────────────────────────────────────── -->
+    <div class="cmp__grid cmp__stat-row">
+      <div class="cmp__label-col cmp__label">Overall rating</div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col">
+          <app-rating-badge [value]="c.average_ratings.overall" />
+        </div>
+      }
+    </div>
+
+    <div class="cmp__grid cmp__stat-row">
+      <div class="cmp__label-col cmp__label">Difficulty</div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col">
+          <app-difficulty-bar [value]="c.average_ratings.difficulty ?? 0" />
+        </div>
+      }
+    </div>
+
+    <div class="cmp__grid cmp__stat-row">
+      <div class="cmp__label-col cmp__label">Reviews</div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col">{{ (c.reviews ?? []).length }}</div>
+      }
+    </div>
+
+    <div class="cmp__grid cmp__stat-row">
+      <div class="cmp__label-col cmp__label">Grading policy</div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col cmp__policy text-muted">{{ c.grading_policy }}</div>
+      }
+    </div>
+
+    <mat-divider class="cmp__divider" />
+
+    <!-- ── Radar charts side by side ─────────────────────────────────────── -->
+    @if (courses().length >= 2) {
+      <div class="cmp__section-title">Rating breakdown (overlaid)</div>
+      <div class="cmp__radar-wrap card">
+        <app-radar-chart
+          [ratings]="courses()[0].average_ratings"
+          [compareRatings]="courses()[1].average_ratings"
+          [primaryLabel]="courses()[0].teacher.full_name"
+          [compareLabel]="courses()[1].teacher.full_name"
+          size="320px" />
+      </div>
+    }
+
+    <!-- ── Grade distribution charts ─────────────────────────────────────── -->
+    <div class="cmp__section-title">Grade distribution</div>
+    <div class="cmp__chart-grid">
+      @for (c of courses(); track c.id) {
+        <div class="card cmp__chart-card">
+          <h3 class="cmp__chart-label">{{ c.teacher.full_name }}</h3>
+          <app-grade-chart [distribution]="c.grade_distribution" />
+        </div>
+      }
+    </div>
+
+    <!-- ── Links back to full course pages ───────────────────────────────── -->
+    <mat-divider class="cmp__divider" />
+    <div class="cmp__grid">
+      <div class="cmp__label-col"></div>
+      @for (c of courses(); track c.id) {
+        <div class="cmp__course-col">
+          <a mat-stroked-button [routerLink]="['/course', c.id]">
+            <mat-icon>open_in_new</mat-icon> View full course
+          </a>
+        </div>
+      }
+    </div>
+
+  }
+</div>

@@ -1,0 +1,198 @@
+@if (loading()) {
+  <app-loading-spinner minHeight="400px" />
+} @else {
+  @if (subject(); as s) {
+
+<!-- ── Header ────────────────────────────────────────────────────────────── -->
+<header class="sdetail__header">
+  <div class="page-container sdetail__header-inner">
+    <div>
+      <div class="sdetail__breadcrumb text-muted">
+        <a routerLink="/subjects">Subjects</a> / {{ s.title }}
+      </div>
+      <h1 class="sdetail__title">{{ s.title }}</h1>
+      <div class="sdetail__meta">
+        <span class="badge badge--{{ s.category }}">{{ s.category }}</span>
+        <span class="text-muted">{{ s.credits }} credits</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page-container sdetail__body">
+
+  <!-- ── Left ──────────────────────────────────────────────────────────── -->
+  <div class="sdetail__col-left">
+
+    <!-- Description -->
+    <section class="card sdetail__section">
+      <h2 class="sdetail__section-title">About</h2>
+      <p style="margin:0;line-height:1.65">{{ s.description }}</p>
+    </section>
+
+    <!-- Difficulty block -->
+    <section class="card sdetail__section">
+      <h2 class="sdetail__section-title">Difficulty profile</h2>
+      <div class="sdetail__diff-row">
+        <span>Overall difficulty</span>
+        <app-difficulty-bar [value]="s.overall_difficulty" class="sdetail__diff-bar" />
+      </div>
+      <div class="sdetail__diff-row">
+        <span matTooltip="High means difficulty varies greatly between teachers">
+          Teacher dependency
+          <mat-icon class="sdetail__info-icon">info_outline</mat-icon>
+        </span>
+        <span class="sdetail__dep-label"
+              [class.dep-high]="s.teacher_dependency_ratio > 2"
+              [class.dep-mid]="s.teacher_dependency_ratio > 1 && s.teacher_dependency_ratio <= 2"
+              [class.dep-low]="s.teacher_dependency_ratio <= 1">
+          {{ dependencyLabel(s.teacher_dependency_ratio) }}
+          <span class="text-muted">(σ={{ s.teacher_dependency_ratio | number:'1.1-1' }})</span>
+        </span>
+      </div>
+    </section>
+
+    <!-- Study Materials -->
+    <section class="card sdetail__section">
+      <div class="sdetail__mat-header">
+        <h2 class="sdetail__section-title" style="margin:0">Study Materials</h2>
+        <button mat-stroked-button (click)="toggleMaterialForm()">
+          <mat-icon>add</mat-icon>
+          {{ showMaterialForm() ? 'Cancel' : 'Submit material' }}
+        </button>
+      </div>
+
+      @if (showMaterialForm()) {
+        <form [formGroup]="materialForm" (ngSubmit)="submitMaterial()" class="sdetail__mat-form">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="lecture">Lecture Notes</mat-option>
+              <mat-option value="exam">Past Exams</mat-option>
+              <mat-option value="book">Book/Reference</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Link (optional)</mat-label>
+            <mat-icon matPrefix>link</mat-icon>
+            <input matInput formControlName="link" placeholder="https://…" />
+          </mat-form-field>
+
+          <div class="sdetail__file-upload">
+            <span class="text-muted" style="font-size:.82rem">Or upload a file (PDF, PPTX, XLSX…)</span>
+            <label class="sdetail__file-label">
+              <mat-icon>upload_file</mat-icon>
+              {{ selectedFile() ? selectedFile()!.name : 'Choose file' }}
+              <input type="file" accept=".pdf,.pptx,.ppt,.xlsx,.xls,.doc,.docx,.zip" (change)="onFileSelected($event)" hidden />
+            </label>
+            @if (selectedFile()) {
+              <button mat-icon-button type="button" (click)="selectedFile.set(null)" matTooltip="Remove file">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </div>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="submittingMaterial()">
+            Submit for review
+          </button>
+        </form>
+      }
+
+      @if (materials().length === 0 && !showMaterialForm()) {
+        <p class="text-muted">No approved materials yet. Be the first to contribute!</p>
+      }
+
+      <div class="sdetail__mat-list">
+        @for (m of materials(); track m.id) {
+          <div class="sdetail__mat-item">
+            <div>
+              <span class="sdetail__mat-title">{{ m.title }}</span>
+              <span class="sdetail__mat-type badge badge--{{ m.type === 'lecture' ? 'major' : 'elective' }}">
+                {{ m.type }}
+              </span>
+            </div>
+            <div class="sdetail__mat-meta text-muted">
+              by {{ m.contributor_name }} · karma {{ m.contributor_karma }}
+            </div>
+            @if (m.link) {
+              <a [href]="m.link" target="_blank" mat-stroked-button>
+                <mat-icon>open_in_new</mat-icon> Open
+              </a>
+            }
+            @if (m.file) {
+              <a [href]="m.file" target="_blank" mat-stroked-button>
+                <mat-icon>download</mat-icon> Download
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <!-- ── Right ─────────────────────────────────────────────────────────── -->
+  <div class="sdetail__col-right">
+    <section class="card sdetail__section">
+      <h2 class="sdetail__section-title">Teachers for this subject</h2>
+      @if (teachers().length === 0) {
+        <p class="text-muted">No teachers recorded yet.</p>
+      } @else {
+        <table mat-table [dataSource]="teachers()" matSort (matSortChange)="sortTeachers($event)"
+               class="sdetail__table">
+
+          <ng-container matColumnDef="teacher_name">
+            <th mat-header-cell *matHeaderCellDef>Teacher</th>
+            <td mat-cell *matCellDef="let row">
+              <a [routerLink]="['/teachers', row.teacher_id]">{{ row.teacher_name }}</a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="avg_difficulty">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Difficulty</th>
+            <td mat-cell *matCellDef="let row">{{ row.avg_difficulty | number:'1.1-1' }}/10</td>
+          </ng-container>
+
+          <ng-container matColumnDef="avg_rating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Rating</th>
+            <td mat-cell *matCellDef="let row">
+              <app-rating-badge [value]="row.avg_rating" />
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="grade_avg">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Grade avg</th>
+            <td mat-cell *matCellDef="let row">{{ row.grade_avg | number:'1.2-2' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <a mat-icon-button [routerLink]="['/course', row.course_instance_id]" matTooltip="View course">
+                <mat-icon>chevron_right</mat-icon>
+              </a>
+              <button mat-icon-button (click)="goToCompare(row.course_instance_id)" matTooltip="Compare">
+                <mat-icon>compare_arrows</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="teacherCols"></tr>
+          <tr mat-row *matRowDef="let row; columns: teacherCols;"></tr>
+        </table>
+      }
+    </section>
+  </div>
+
+</div><!-- /body -->
+  } @else {
+    <div class="page-container" style="padding-top:40px">
+      <p class="text-muted">Subject not found.</p>
+      <a mat-stroked-button routerLink="/subjects">Back to subjects</a>
+    </div>
+  }
+}

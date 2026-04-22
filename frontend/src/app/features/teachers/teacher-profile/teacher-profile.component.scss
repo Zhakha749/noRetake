@@ -1,0 +1,143 @@
+// ── Header ────────────────────────────────────────────────────────────────────
+.profile {
+  &__header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 32px 0;
+  }
+
+  &__header-inner {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+
+  &__photo-wrap { flex-shrink: 0; }
+
+  &__photo {
+    width: 100px; height: 100px; border-radius: 50%;
+    object-fit: cover; border: 3px solid var(--color-border);
+
+    &--placeholder {
+      background: var(--color-surface-2);
+      display: flex; align-items: center; justify-content: center;
+      mat-icon { font-size: 52px; color: var(--color-text-muted); }
+    }
+  }
+
+  &__hero-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+  &__name-row { display: flex; align-items: center; gap: 10px; }
+
+  &__name { font-size: 1.8rem; font-weight: 800; margin: 0; }
+
+  &__verified {
+    mat-icon { font-size: 24px; color: #1976d2; vertical-align: middle; }
+  }
+
+  &__meta { display: flex; gap: 8px; font-size: .9rem; }
+
+  &__actions { margin-left: auto; }
+
+  // ── Body layout ───────────────────────────────────────────────────────────
+  &__body {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    padding-top: 28px; padding-bottom: 40px;
+  }
+
+  &__col-left, &__col-right {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  &__section { padding: 20px; }
+
+  &__section-title {
+    font-size: 1.1rem; font-weight: 700; margin: 0 0 14px;
+  }
+
+  &__desc {
+    border-left: 3px solid var(--color-primary);
+    margin: 0; padding: 8px 16px;
+    font-style: italic; line-height: 1.65;
+    color: var(--color-text-muted);
+  }
+
+  // ── Rating row ────────────────────────────────────────────────────────────
+  &__rating-row {
+    display: flex; justify-content: space-around; flex-wrap: wrap;
+    gap: 12px; margin-top: 12px;
+  }
+
+  &__stat {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    &-val { font-size: 1.1rem; font-weight: 700; }
+    &-lbl { font-size: .72rem; text-transform: capitalize; }
+  }
+
+  // ── Bias section ──────────────────────────────────────────────────────────
+  &__bias-section { opacity: .75; }
+  &__bias-toggle { display: flex; align-items: center; gap: 6px; width: 100%; }
+  &__bias-note { font-size: .85rem; margin: 8px 0 0; }
+
+  // ── Reviews hint ──────────────────────────────────────────────────────────
+  &__reviews-hint {
+    display: flex; align-items: center; gap: 6px;
+    font-size: .85rem; margin-bottom: 12px;
+    mat-icon { font-size: 16px; height: 16px; width: 16px; }
+  }
+
+  &__course-links { display: flex; flex-direction: column; gap: 8px; }
+
+  &__course-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; text-decoration: none; color: var(--color-text);
+    &:hover { text-decoration: none; }
+  }
+
+  &__course-name { font-weight: 500; font-size: .9rem; }
+}
+
+// ── Teaching history timeline ─────────────────────────────────────────────────
+.timeline {
+  display: flex; flex-direction: column; gap: 20px;
+
+  &__group { display: flex; flex-direction: column; gap: 8px; }
+
+  &__year-marker {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  &__year-label {
+    font-weight: 700; font-size: .85rem; color: var(--color-primary);
+    white-space: nowrap;
+  }
+
+  &__year-line {
+    flex: 1; height: 1px; background: var(--color-border);
+  }
+
+  &__items { display: flex; flex-direction: column; gap: 6px; padding-left: 12px; }
+
+  &__item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    border-left: 3px solid var(--color-border);
+    background: var(--color-surface-2);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    text-decoration: none; color: var(--color-text);
+    transition: background var(--transition);
+    &:hover { background: var(--color-border); text-decoration: none; }
+  }
+
+  &__subject { font-size: .88rem; font-weight: 500; }
+
+  &__role {
+    font-size: .75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .4px;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+  .profile__body { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,42 @@
+<div class="slist page-container">
+  <div class="slist__topbar">
+    <h1 class="slist__heading">
+      Subjects
+      @if (!loading()) { <span class="text-muted" style="font-size:1rem;margin-left:8px">({{ total() }})</span> }
+    </h1>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="slist__search">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [formControl]="searchCtrl" placeholder="Search subjects…" />
+    </mat-form-field>
+  </div>
+
+  <!-- Category tabs -->
+  <div class="slist__tabs">
+    @for (cat of categories; track cat) {
+      <button class="slist__tab"
+              [class.slist__tab--active]="activeCategory() === cat"
+              (click)="selectCategory(cat)">
+        {{ cat | titlecase }}
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (subjects().length === 0) {
+    <div class="slist__empty">
+      <mat-icon>search_off</mat-icon>
+      <p>No subjects found.</p>
+    </div>
+  } @else {
+    <div class="slist__grid">
+      @for (s of subjects(); track s.id) {
+        <app-subject-card [subject]="s" />
+      }
+    </div>
+    <mat-paginator
+      [length]="total()" [pageSize]="pageSize" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[10,20,50]" (page)="onPageChange($event)" />
+  }
+</div>

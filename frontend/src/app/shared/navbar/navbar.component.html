@@ -1,0 +1,76 @@
+<mat-toolbar class="navbar" [class.navbar--dark]="theme.isDark$ | async">
+  <!-- Brand -->
+  <a routerLink="/" class="navbar__brand">
+    <span class="navbar__brand-icon">🎓</span>
+    <span class="navbar__brand-text">WSP<span class="navbar__brand-accent">2</span></span>
+  </a>
+
+  <!-- Desktop nav links -->
+  @if (auth.isLoggedIn$ | async) {
+    <nav class="navbar__links hide-mobile">
+      <a mat-button routerLink="/teachers" routerLinkActive="nav-active">
+        <mat-icon>people</mat-icon> Teachers
+      </a>
+      <a mat-button routerLink="/subjects" routerLinkActive="nav-active">
+        <mat-icon>menu_book</mat-icon> Subjects
+      </a>
+    </nav>
+  }
+
+  <span class="spacer"></span>
+
+  <!-- Dark mode toggle -->
+  <button
+    mat-icon-button
+    (click)="theme.toggle()"
+    [matTooltip]="(theme.isDark$ | async) ? 'Switch to light mode' : 'Switch to dark mode'"
+    class="navbar__icon-btn"
+  >
+    <mat-icon>{{ (theme.isDark$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <!-- Auth section -->
+  @if (auth.isLoggedIn$ | async) {
+    @if (auth.isAdmin()) {
+      <a mat-button routerLink="/admin-dashboard" class="hide-mobile">
+        <mat-icon>admin_panel_settings</mat-icon> Admin
+      </a>
+    }
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="navbar__icon-btn">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      @if (auth.isAdmin()) {
+        <a mat-menu-item routerLink="/admin-dashboard">
+          <mat-icon>dashboard</mat-icon> Admin Dashboard
+        </a>
+      }
+      <mat-divider />
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </mat-menu>
+  } @else {
+    <a mat-button routerLink="/login" class="hide-mobile">Log in</a>
+    <a mat-raised-button color="primary" routerLink="/register" class="hide-mobile">Sign up</a>
+  }
+
+  <!-- Mobile hamburger -->
+  <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="hide-desktop">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #mobileMenu="matMenu">
+    @if (auth.isLoggedIn$ | async) {
+      <a mat-menu-item routerLink="/teachers"><mat-icon>people</mat-icon> Teachers</a>
+      <a mat-menu-item routerLink="/subjects"><mat-icon>menu_book</mat-icon> Subjects</a>
+      <mat-divider />
+      @if (auth.isAdmin()) {
+        <a mat-menu-item routerLink="/admin-dashboard"><mat-icon>admin_panel_settings</mat-icon> Admin</a>
+      }
+      <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
+    } @else {
+      <a mat-menu-item routerLink="/login"><mat-icon>login</mat-icon> Log in</a>
+      <a mat-menu-item routerLink="/register"><mat-icon>person_add</mat-icon> Sign up</a>
+    }
+  </mat-menu>
+</mat-toolbar>

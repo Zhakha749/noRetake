@@ -1,0 +1,238 @@
+@if (loading()) {
+  <app-loading-spinner minHeight="400px" />
+} @else {
+  @if (course(); as c) {
+
+<!-- ── Breadcrumb ─────────────────────────────────────────────────────────── -->
+<nav class="cd-breadcrumb page-container text-muted">
+  <a routerLink="/subjects">Subjects</a>
+  <mat-icon>chevron_right</mat-icon>
+  <a [routerLink]="['/subjects', c.subject.id]">{{ c.subject.title }}</a>
+  <mat-icon>chevron_right</mat-icon>
+  <a [routerLink]="['/teachers', c.teacher.id]">{{ c.teacher.full_name }}</a>
+</nav>
+
+<!-- ── Overview ──────────────────────────────────────────────────────────── -->
+<header class="cd-overview page-container">
+  <div class="cd-overview__left">
+    <div class="cd-overview__photo">
+      <img [src]="c.teacher.photo || 'assets/default-avatar.svg'" (error)="$any($event.target).src='assets/default-avatar.svg'" [alt]="c.teacher.full_name" />
+    </div>
+    <div>
+      <h1 class="cd-overview__subject">{{ c.subject.title }}</h1>
+      <div class="cd-overview__meta">
+        <a [routerLink]="['/teachers', c.teacher.id]" class="cd-overview__teacher">
+          {{ c.teacher.full_name }}
+        </a>
+        <span class="cd-badge cd-badge--{{ c.role.toLowerCase() }}">{{ c.role }}</span>
+        <span class="text-muted">{{ c.year_interval }}</span>
+      </div>
+      <app-rating-badge [value]="c.average_ratings.overall" />
+    </div>
+  </div>
+  <button mat-stroked-button (click)="goCompare()" class="cd-overview__compare">
+    <mat-icon>compare_arrows</mat-icon> Compare with another teacher
+  </button>
+</header>
+
+<div class="page-container cd-body">
+
+  <!-- ── Left column ──────────────────────────────────────────────────────── -->
+  <div class="cd-col-left">
+
+    <!-- Grading policy -->
+    <section class="card cd-section">
+      <h2 class="cd-section__title">Grading policy</h2>
+      <p class="cd-grading-policy">{{ c.grading_policy }}</p>
+    </section>
+
+    <!-- Grade distribution chart -->
+    <section class="card cd-section">
+      <h2 class="cd-section__title">Grade distribution</h2>
+      <app-grade-chart [distribution]="c.grade_distribution" />
+    </section>
+
+    <!-- Radar chart -->
+    <section class="card cd-section">
+      <h2 class="cd-section__title">Rating breakdown</h2>
+      @if (c.average_ratings.overall > 0) {
+        <app-radar-chart [ratings]="c.average_ratings" size="260px" />
+      } @else {
+        <p class="text-muted">No ratings yet.</p>
+      }
+    </section>
+
+    <!-- Syllabus history -->
+    <section class="card cd-section">
+      <h2 class="cd-section__title">Syllabus history</h2>
+      @if (c.syllabus_history.length === 0) {
+        <p class="text-muted">No syllabi uploaded yet.</p>
+      } @else {
+        <table mat-table [dataSource]="c.syllabus_history" class="cd-table">
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef>Year</th>
+            <td mat-cell *matCellDef="let s">{{ s.year }}</td>
+          </ng-container>
+          <ng-container matColumnDef="uploaded_by_name">
+            <th mat-header-cell *matHeaderCellDef>Uploaded by</th>
+            <td mat-cell *matCellDef="let s">{{ s.uploaded_by_name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="uploaded_at">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let s">{{ s.uploaded_at | date:'mediumDate' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let s">
+              @if (s.file) {
+                <a mat-icon-button [href]="s.file" target="_blank" matTooltip="Download PDF">
+                  <mat-icon>download</mat-icon>
+                </a>
+              }
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="syllabusCols"></tr>
+          <tr mat-row *matRowDef="let row; columns: syllabusCols;"></tr>
+        </table>
+      }
+    </section>
+  </div>
+
+  <!-- ── Right column ─────────────────────────────────────────────────────── -->
+  <div class="cd-col-right">
+
+    <!-- Weekly plan accordion -->
+    <section class="card cd-section">
+      <h2 class="cd-section__title">Weekly plan</h2>
+      @if (c.weekly_plan.length === 0) {
+        <p class="text-muted">No weekly plan available.</p>
+      } @else {
+        <mat-accordion>
+          @for (week of c.weekly_plan; track week.week) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Week {{ week.week }}</mat-panel-title>
+                <mat-panel-description class="cd-week-preview">
+                  {{ week.topic }}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="cd-week-detail">
+                <p><strong>Topic:</strong> {{ week.topic }}</p>
+                <p><strong>Type:</strong>
+                  <span class="cd-badge cd-badge--{{ week.type }}">{{ week.type }}</span>
+                </p>
+              </div>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      }
+    </section>
+
+    <!-- Reviews section -->
+    <section class="cd-section">
+      <div class="cd-reviews__header">
+        <h2 class="cd-section__title" style="margin:0">
+          Reviews ({{ sortedReviews().length }})
+        </h2>
+        <div class="cd-reviews__sort">
+          <button mat-button [class.active-sort]="reviewSort()==='helpful'"
+                  (click)="reviewSort.set('helpful')">Most helpful</button>
+          <button mat-button [class.active-sort]="reviewSort()==='recent'"
+                  (click)="reviewSort.set('recent')">Most recent</button>
+        </div>
+      </div>
+
+      <!-- Write review button -->
+      <button mat-raised-button color="primary" class="cd-reviews__write-btn" (click)="toggleForm()">
+        <mat-icon>{{ showForm() ? 'close' : 'rate_review' }}</mat-icon>
+        {{ showForm() ? 'Cancel' : 'Write a review' }}
+      </button>
+
+      <!-- Inline review form -->
+      @if (showForm()) {
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="cd-review-form card">
+          <h3 class="cd-review-form__title">Your review</h3>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Your experience</mat-label>
+            <textarea matInput formControlName="text" rows="4"
+                      placeholder="Share your honest experience with this course…"></textarea>
+            @if (reviewForm.controls.text.hasError('minlength') && reviewForm.controls.text.touched) {
+              <mat-error>At least 20 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Rating sliders -->
+          <div class="cd-review-form__sliders">
+            @for (ctrl of [
+              {key:'rating',               label:'Overall rating'},
+              {key:'difficulty_rating',    label:'Difficulty'},
+              {key:'clarity_rating',       label:'Clarity'},
+              {key:'objectivity_rating',   label:'Objectivity'},
+              {key:'accessibility_rating', label:'Accessibility'},
+              {key:'workload_rating',      label:'Workload'}
+            ]; track ctrl.key) {
+              <div class="cd-review-form__slider-row">
+                <span class="cd-review-form__slider-label">{{ ctrl.label }}</span>
+                <mat-slider min="1" max="10" step="1" class="cd-slider">
+                  <input matSliderThumb [formControlName]="ctrl.key" />
+                </mat-slider>
+                <span class="cd-review-form__slider-val">
+                  {{ reviewForm.get(ctrl.key)?.value }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <!-- Checkboxes -->
+          <div class="cd-review-form__checks">
+            <mat-checkbox formControlName="is_anonymous">Post anonymously</mat-checkbox>
+            <mat-checkbox formControlName="took_this_course">I took this course</mat-checkbox>
+          </div>
+
+          <!-- Sensitive markers (collapsible) -->
+          <mat-expansion-panel class="cd-review-form__markers">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Sensitive markers (optional)</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="cd-review-form__checks">
+              <mat-checkbox formControlName="gender_bias">Report gender bias concerns</mat-checkbox>
+              <mat-checkbox formControlName="favoritism">Report favoritism</mat-checkbox>
+            </div>
+          </mat-expansion-panel>
+
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="submitting() || reviewForm.invalid">
+            @if (submitting()) { Submitting… } @else { Submit review }
+          </button>
+        </form>
+      }
+
+      <!-- Review list -->
+      @if (sortedReviews().length === 0) {
+        <p class="text-muted" style="margin-top:16px">
+          No reviews yet. Be the first to review this course!
+        </p>
+      }
+      <div class="cd-review-list">
+        @for (review of sortedReviews(); track review.id) {
+          <app-review-card
+            [review]="review"
+            [canVote]="auth.isLoggedIn()"
+            [canReport]="auth.isLoggedIn()"
+            (voteClicked)="vote(review, $event)"
+            (reportClicked)="report(review)" />
+        }
+      </div>
+    </section>
+
+  </div><!-- /col-right -->
+</div><!-- /body -->
+
+  } @else {
+    <div class="page-container" style="padding-top:40px">
+      <p class="text-muted">Course not found.</p>
+      <a mat-stroked-button routerLink="/">Home</a>
+    </div>
+  }
+}

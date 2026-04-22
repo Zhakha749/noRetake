@@ -1,0 +1,11 @@
+<a class="scard card" [routerLink]="['/subjects', subject().id]">
+  <div class="scard__header">
+    <h3 class="scard__title">{{ subject().title }}</h3>
+    <span class="badge badge--{{ subject().category }}">{{ subject().category }}</span>
+  </div>
+  <span class="text-muted scard__credits">{{ subject().credits }} credits</span>
+  <div class="scard__diff">
+    <span class="text-muted scard__diff-label">Difficulty</span>
+    <app-difficulty-bar [value]="subject().overall_difficulty" />
+  </div>
+</a>

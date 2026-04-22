@@ -1,0 +1,84 @@
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-card__header">
+      <h1 class="auth-card__title">Create account</h1>
+      <p class="text-muted">KBTU university email required</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-card__form" novalidate>
+
+      <!-- Username -->
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="your_username" autocomplete="username" />
+        <mat-icon matPrefix>person</mat-icon>
+        @if (form.controls.username.hasError('required') && form.controls.username.touched) {
+          <mat-error>Username is required</mat-error>
+        }
+        @if (form.controls.username.hasError('minlength') && form.controls.username.touched) {
+          <mat-error>At least 3 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline">
+        <mat-label>University email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="you@kbtu.kz" autocomplete="email" />
+        <mat-icon matPrefix>email</mat-icon>
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+        @if (form.controls.email.hasError('kbtuEmail') && form.controls.email.touched) {
+          <mat-error>Only <strong>&#64;kbtu.kz</strong> emails are allowed</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'"
+               formControlName="password" autocomplete="new-password" />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+        @if (form.controls.password.hasError('minlength') && form.controls.password.touched) {
+          <mat-error>At least 8 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Confirm password -->
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm password</mat-label>
+        <input matInput [type]="hidePassword2 ? 'password' : 'text'"
+               formControlName="password2" autocomplete="new-password" />
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword2 = !hidePassword2">
+          <mat-icon>{{ hidePassword2 ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.hasError('passwordMismatch') && form.controls.password2.touched) {
+          <mat-error>Passwords do not match</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="w-full auth-card__submit" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20" />
+        } @else {
+          Create account
+        }
+      </button>
+    </form>
+
+    <p class="auth-card__footer text-muted">
+      Already have an account?
+      <a routerLink="/login">Log in</a>
+    </p>
+  </div>
+</div>
